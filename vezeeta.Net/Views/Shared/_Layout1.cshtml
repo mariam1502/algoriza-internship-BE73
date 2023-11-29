@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" type="text/css" href="~/css/shared-template.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js">
+
+</head>
+<body>
+    <nav>
+        <img id="logo" src="~/images/vezeeta_logo.png" alt="Logo" width=100%>
+        <ul>
+            <li><a href="#">Option 1</a></li>
+            <li><a href="#">Option 2</a></li>
+            <li><a href="#">Option 3</a></li>
+            <li><a href="#">Option 4</a></li>
+        </ul>
+    </nav>
+
+    <div>
+        <section>
+
+        @RenderBody()
+        </section>
+
+    </div>
+</body>
+</html>
+
+

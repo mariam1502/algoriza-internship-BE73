@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "_Layout1";
+}
+@model Microsoft.AspNetCore.Identity.IdentityUser
+@{
+    if(Model!=null)
+    {  
+        <p> Hello Admin , @Model.UserName </p><br />
+        <a asp-controller="Admin" asp-action="">Get All Doctors</a><br />
+        <a asp-controller="Admin" asp-action="">Get a Doctor By Id</a><br />
+
+        <a asp-controller="Admin" asp-action="AddDoctor">Add a Doctor</a>
+        <br />
+        <a asp-controller="Admin" asp-action="">Edit a Doctor</a><br />
+        <a asp-controller="Admin" asp-action="">Delete a Doctor</a><br />
+
+        <hr />
+
+
+        <a asp-controller="Admin" asp-action="">Get All Patients</a><br />
+        <a asp-controller="Admin" asp-action="">Get a Patient By Id</a><br />
+
+        <hr />
+
+        <a asp-controller="Admin" asp-action="">Add a Coupon</a><br />
+        <a asp-controller="Admin" asp-action="">Edit a Coupon</a><br />
+        <a asp-controller="Admin" asp-action="">Delete a Coupon</a><br />
+        <a asp-controller="Admin" asp-action="">Deactivate a Coupon</a><br />
+
+
+
+
+
+    }
+    else
+    {
+        <p>please login</p>
+    }
+}
+
+
+
+

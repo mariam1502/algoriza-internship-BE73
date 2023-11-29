@@ -12,39 +12,56 @@ namespace Repo
     {
         private readonly ApplicationContext _context;
         private DbSet<T> _entity;
-        public Repository(ApplicationContext context) {
+        public Repository(ApplicationContext context)
+        {
 
             this._context = context;
-            _entity=context.Set<T>();
+            _entity = context.Set<T>();
         }
         public void Add(T user)
         {
             _entity.Add(user);
         }
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
-            T itemToDelete=_entity.FirstOrDefault<T>(e=>int.Parse(e.Id)==id);
-            if ( itemToDelete != null )
+            T itemToDelete = _entity.FirstOrDefault(e => int.Parse(e.Id) == id);
+
+            if (itemToDelete != null)
             {
-                _context.Remove(itemToDelete);
+                _entity.Remove(itemToDelete);
             }
         }
 
         public void Edit(T user)
         {
-            throw new NotImplementedException();
+            T getuser = _entity.FirstOrDefault<T>(u => int.Parse(u.Id) == int.Parse(user.Id));
+            if (getuser != null)
+            {
+                getuser.Id = user.Id;
+                getuser.PhoneNumber = user.PhoneNumber;
+                getuser.FirstName = user.FirstName;
+                getuser.LastName = user.LastName;
+                getuser.Email = user.Email;
+                getuser.Gendre = user.Gendre;
+                getuser.Image = user.Image;
+                getuser.PasswordHash = user.PasswordHash;
+            }
+
+
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _entity.AsEnumerable<T>();
         }
 
-        public T GetById(long id)
+        public T GetById(int id)
         {
             T itemToGet = _entity.FirstOrDefault<T>(e => int.Parse(e.Id) == id);
             return itemToGet;
         }
     }
+
+       
 }

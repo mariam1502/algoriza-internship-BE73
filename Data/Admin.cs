@@ -8,6 +8,7 @@ namespace Data
 {
     public class Admin
     {
+        
 
     }
 }

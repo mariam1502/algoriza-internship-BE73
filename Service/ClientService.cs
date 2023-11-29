@@ -8,5 +8,7 @@ namespace Service
 {
     public class ClientService:IClient
     {
+        public ClientService() { 
+        }
     }
 }
