@@ -18,37 +18,37 @@ namespace Repo
             this._context = context;
             _entity = context.Set<T>();
         }
-        public void Add(T user)
+        public async Task AddAsync(T user)
         {
             _entity.Add(user);
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(T doctor)
         {
-            T itemToDelete = _entity.FirstOrDefault(e => int.Parse(e.Id) == id);
+            _entity.Remove(doctor);
+            await _context.SaveChangesAsync();
 
-            if (itemToDelete != null)
-            {
-                _entity.Remove(itemToDelete);
-            }
+            
         }
 
-        public void Edit(T user)
+        public async Task EditAsync(T newuser)
         {
-            T getuser = _entity.FirstOrDefault<T>(u => int.Parse(u.Id) == int.Parse(user.Id));
+            T getuser = await GetByIdAsync(newuser.Id);
             if (getuser != null)
             {
-                getuser.Id = user.Id;
-                getuser.PhoneNumber = user.PhoneNumber;
-                getuser.FirstName = user.FirstName;
-                getuser.LastName = user.LastName;
-                getuser.Email = user.Email;
-                getuser.Gendre = user.Gendre;
-                getuser.Image = user.Image;
-                getuser.PasswordHash = user.PasswordHash;
+                getuser.PhoneNumber = newuser.PhoneNumber;
+                getuser.FirstName = newuser.FirstName;
+                getuser.LastName = newuser.LastName;
+                getuser.Email = newuser.Email;
+                getuser.Gendre = newuser.Gendre;
+                getuser.Image = newuser.Image;
+                getuser.PasswordHash = newuser.PasswordHash;
+                getuser.DateOfBirth = newuser.DateOfBirth; 
+                
             }
-
-
+            _entity.Update(getuser);
+            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<T> GetAll()
@@ -56,9 +56,10 @@ namespace Repo
             return _entity.AsEnumerable<T>();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(string id)
         {
-            T itemToGet = _entity.FirstOrDefault<T>(e => int.Parse(e.Id) == id);
+            T itemToGet =await  _entity.FirstOrDefaultAsync<T>(e => e.Id == id);
+
             return itemToGet;
         }
     }

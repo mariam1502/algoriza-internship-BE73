@@ -4,6 +4,7 @@ namespace vezeeta.Net.Models.ViewModel.Admin
 {
     public class AdminViewModel
     {
+        public string Id { get; set; }
        public string Email { get; set; }
 
        [DataType(DataType.Password)]
@@ -16,6 +17,7 @@ namespace vezeeta.Net.Models.ViewModel.Admin
         public string Gendre { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Image { get; set; }
+        public string NormalizedEmail { get; set; }
 
     }
 }

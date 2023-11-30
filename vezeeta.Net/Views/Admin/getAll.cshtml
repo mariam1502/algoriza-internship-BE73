@@ -1,0 +1,67 @@
+﻿@using vezeeta.Net.Models.ViewModel.Admin
+@model IEnumerable<AdminViewModel>;
+
+@{
+    Layout = "_Layout1";
+
+
+}
+
+<h1>Get All @ViewBag.GetAll Page</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Specialization</th>
+            <th>Phone Number</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+   <tbody>
+        @foreach (var eachModel in Model)
+        {
+            <tr>
+                <td>@eachModel.Id</td>
+
+                <td>@eachModel.FirstName</td>
+                <td>@eachModel.LastName</td>
+                <td>@eachModel.Email</td>
+                <td>@eachModel.specialization</td>
+                <td>@eachModel.PhoneNumber</td>
+                <th>
+                 @{if(ViewBag.GetAll=="Doctors")
+                 {
+
+                <br />
+                    <form asp-controller="Admin" asp-action="EditDoctor" method="post">
+                    <input type="hidden" name="Id" value=@eachModel.Id />
+                    <button type="submit">Edit</button>
+
+                </form>
+
+                <form asp-controller="Admin" asp-action="DeleteDoctor" method="post">
+                    <input type="hidden" name="Id" value=@eachModel.Id />
+                    <button type="submit">Delete</button>
+
+                </form>
+                <br />
+                 }
+                }
+
+                 </th>
+
+
+
+
+               
+            </tr>
+
+        }
+    </tbody>
+</table>

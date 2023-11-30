@@ -5,19 +5,34 @@
 @{
     if(Model!=null)
     {  
-        <p> Hello Admin , @Model.UserName </p><br />
-        <a asp-controller="Admin" asp-action="">Get All Doctors</a><br />
+        <h1>Admin Home Page</h1>
+
+        <p> Hello , @Model.UserName </p><br />
+        <p> Dashboard methods</p>
+        
+         <a asp-controller="Admin" asp-action="GetNumOfDoctors">Get Number of Doctors</a>
+        <br />
+        <a asp-controller="Admin" asp-action="GetNumOfPatients">Get Number of Patients</a><br />
+
+        <a asp-controller="Admin" asp-action="">Get Number of Requests</a>
+        <br />
+        <a asp-controller="Admin" asp-action="">Top 5 specializations</a><br />
+        <a asp-controller="Admin" asp-action="">Top 10 Doctors</a><br />
+
+        <hr />
+        
+
+        <a asp-controller="Admin" asp-action="GetAllDoctors">Get All Doctors</a>
+        <br />
         <a asp-controller="Admin" asp-action="">Get a Doctor By Id</a><br />
 
         <a asp-controller="Admin" asp-action="AddDoctor">Add a Doctor</a>
         <br />
-        <a asp-controller="Admin" asp-action="">Edit a Doctor</a><br />
-        <a asp-controller="Admin" asp-action="">Delete a Doctor</a><br />
 
         <hr />
 
 
-        <a asp-controller="Admin" asp-action="">Get All Patients</a><br />
+        <a asp-controller="Admin" asp-action="GetAllPatients">Get All Patients</a><br />
         <a asp-controller="Admin" asp-action="">Get a Patient By Id</a><br />
 
         <hr />
@@ -35,9 +50,6 @@
     else
     {
         <p>please login</p>
+        <a asp-asp-controller="admin" asp-action="login">Login</a><br />
     }
 }
-
-
-
-

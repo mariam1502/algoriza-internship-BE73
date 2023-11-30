@@ -12,6 +12,8 @@ namespace Service
     {
         private IRepository<Doctor> doctorRepo;
         private IRepository<Patient> patientRepo;
+
+
         public AdminService(IRepository<Doctor> doctorRepo, IRepository<Patient> patientRepo) 
         { 
             this.doctorRepo = doctorRepo;
@@ -19,13 +21,20 @@ namespace Service
         }
         public int NumOfDoctors()
         {
-            return doctorRepo.GetAll().Count();
+            IEnumerable<Doctor> doctors = doctorRepo.GetAll();
+            int count = doctors.Count();
+            return count;
         }
 
         public int NumOfPatients()
         {
-            return patientRepo.GetAll().Count();
+            IEnumerable<Patient> patients = patientRepo.GetAll();
+            int count = patients.Count();
+            return count;
         }
+
+
+       
 
         public int NumOfRequests()
         {
@@ -42,9 +51,10 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        void IAdminService.AddDoctor(Doctor doctor)
+        async Task IAdminService.AddDoctor(Doctor doctor)
         {
-            doctorRepo.Add(doctor);
+            await doctorRepo.AddAsync(doctor);
+            
         }
 
         void IAdminService.DeactivateCoupon(Coupon coupon)
@@ -57,9 +67,17 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        void IAdminService.DeleteDoctor(Doctor doctor)
+         public async Task DeleteDoctorAsync(string id)
         {
-            throw new NotImplementedException();
+           Doctor doctor=await doctorRepo.GetByIdAsync(id);
+            if(doctor!=null)
+            {
+                await doctorRepo.DeleteAsync(doctor);
+
+            }
+
+
+
         }
 
         void IAdminService.EditCoupon(Coupon coupon)
@@ -74,20 +92,20 @@ namespace Service
 
         IEnumerable<Doctor> IAdminService.GetAllDoctors()
         {
-            throw new NotImplementedException();
+            return doctorRepo.GetAll();
         }
 
         IEnumerable<Patient> IAdminService.GetAllPatients()
         {
-            throw new NotImplementedException();
+            return patientRepo.GetAll();
         }
 
-        Doctor IAdminService.GetDoctorById(int id)
+        Task<Doctor> IAdminService.GetDoctorById(string id)
         {
-            throw new NotImplementedException();
+            return  doctorRepo.GetByIdAsync(id);
         }
 
-        Patient IAdminService.GetPatientById(int id)
+        Patient IAdminService.GetPatientById(string id)
         {
             throw new NotImplementedException();
         }

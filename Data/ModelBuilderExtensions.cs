@@ -18,7 +18,8 @@ namespace Data
                 {
                     Id="1",
                      Email="Admin@gmail.com",
-                     UserName="Admin",
+                     NormalizedEmail= "Admin@gmail.com",
+                     UserName ="Admin",
                       PasswordHash="Admin@123"
                 });
             modelBuilder.Entity<IdentityRole>().HasData(
@@ -34,6 +35,7 @@ namespace Data
                     UserId = "1",
                     RoleId = "1"
                 });
+
         }
     }
 }

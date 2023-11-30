@@ -10,9 +10,9 @@ namespace Repo
     public interface IRepository<T> where T : BaseEntity
     {
         IEnumerable<T> GetAll();
-        T GetById(int id);
-        void Add(T user);
-        void Edit(T user);
-        void Delete(int id);
+        Task<T> GetByIdAsync(string id);
+        Task AddAsync(T user);
+        Task EditAsync(T user);
+        Task DeleteAsync(T doctor);
     }
 }

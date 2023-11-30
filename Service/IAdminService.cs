@@ -9,21 +9,19 @@ namespace Service
 {
     public interface IAdminService
     {
+
         int NumOfDoctors();
         int NumOfPatients();
-        int NumOfRequests();
-        //IEnumerable<Request> Top10Requests();
-        IEnumerable<Doctor> Top10Doctors();
 
-        void AddDoctor(Doctor doctor);
+        Task AddDoctor(Doctor doctor);
         void EditDoctor(Doctor doctor);
-        void DeleteDoctor(Doctor doctor);
+        Task DeleteDoctorAsync(string id);
         IEnumerable<Doctor> GetAllDoctors();
-        Doctor GetDoctorById(int id);
+        Task<Doctor> GetDoctorById(string id);
 
 
         IEnumerable<Patient> GetAllPatients();
-        Patient GetPatientById(int id);
+        Patient GetPatientById(string id);
 
 
         void AddCoupon(Coupon coupon);

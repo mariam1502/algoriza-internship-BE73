@@ -19,6 +19,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
         .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
 builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddTransient<IPatientService, PatientService>();
+
+
 
 var app = builder.Build();
 
@@ -29,6 +32,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseStaticFiles();
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+  
+});
 
 app.UseHttpsRedirection();
 
