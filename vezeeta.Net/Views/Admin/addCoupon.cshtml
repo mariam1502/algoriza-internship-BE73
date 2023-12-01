@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_Layout1";
+
+}
+@model vezeeta.Net.Models.ViewModel.Admin.CouponViewModel;
+
+
+<h1>Add Coupon Page </h1>
+<form asp-controller="Admin" asp-action="AddCoupon" method="post">
+
+
+ 
+    <div>
+        <label asp-for="CouponCode"></label>
+        <input asp-for="CouponCode" />
+    </div><br />
+
+    <div>
+        <label asp-for="NumOfRequests"></label>
+        <input asp-for="NumOfRequests" />
+    </div><br />
+
+
+    <div>
+        <label asp-for="DiscountType"></label>
+
+        <select asp-for="DiscountType">
+                 
+            <option value=0>Percentage</option>
+            <option value=1 >Value</option>
+
+        </select>
+
+    <br />
+    <br>
+
+    <button type="submit">Add</button>
+
+
+
+</form>

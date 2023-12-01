@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public interface IPatientService
+    public interface IRoleService
     {
-        Task<bool> Register(Patient patient);
-        Task login(Patient patient);
-        
+        Task<string> GetUserRoleById(string userId);
 
-
+        Task<bool> AddUserRole(string userId, string role);
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repo;
@@ -19,7 +20,18 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
         .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
 builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddTransient<IDoctorService, DoctorService>();
+
+//builder.Services.AddTransient<ICouponService, CouponService>();
+
+
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 builder.Services.AddTransient<IPatientService, PatientService>();
+
+
+
+
 
 
 
@@ -39,7 +51,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
-  
+
 });
 
 app.UseHttpsRedirection();

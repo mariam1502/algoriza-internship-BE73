@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Repo;
+using System.Numerics;
 
 namespace Service
 {
@@ -12,100 +13,87 @@ namespace Service
     {
         private IRepository<Doctor> doctorRepo;
         private IRepository<Patient> patientRepo;
+        private IRepository<Coupon> couponRepo;
 
-
-        public AdminService(IRepository<Doctor> doctorRepo, IRepository<Patient> patientRepo) 
+        public AdminService(IRepository<Doctor> doctorRepo, IRepository<Patient> patientRepo, IRepository<Coupon> couponRepo) 
         { 
             this.doctorRepo = doctorRepo;
             this.patientRepo = patientRepo;
+            this.couponRepo = couponRepo;
         }
         public int NumOfDoctors()
         {
-            IEnumerable<Doctor> doctors = doctorRepo.GetAll();
+            IEnumerable<Doctor> doctors =  doctorRepo.GetAll();
             int count = doctors.Count();
             return count;
         }
 
         public int NumOfPatients()
         {
-            IEnumerable<Patient> patients = patientRepo.GetAll();
+            IEnumerable<Patient> patients =  patientRepo.GetAll();
             int count = patients.Count();
             return count;
         }
-
-
-       
-
-        public int NumOfRequests()
+        public async Task<bool> AddDoctor(Doctor doctor)
         {
-            throw new NotImplementedException();
+            bool result=await doctorRepo.AddAsync(doctor);
+            return result;
+        }
+        public async Task<bool> EditDoctor(Doctor doctor)
+        {
+            bool result = await doctorRepo.EditAsync(doctor);
+            return result;
         }
 
-        public IEnumerable<Doctor> Top10Doctors()
+
+        public async Task<bool> DeleteDoctorAsync(Doctor doctor)
         {
-            throw new NotImplementedException();
+            bool result = await doctorRepo.DeleteAsync(doctor);
+            return result;
         }
 
-        void IAdminService.AddCoupon(Coupon coupon)
+        public IEnumerable<Doctor> GetAllDoctors(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            IEnumerable<Doctor> doctors =  doctorRepo.GetAll();          
+            doctors = doctors.Skip((page - 1) * pageSize).Take(pageSize);
+            return doctors;   
+        }
+      
+        //public async Task<Doctor> GetDoctorById(string id)
+        //{
+        //    return await doctorRepo.GetByIdAsync(id);
+        //}
+
+        public IEnumerable<Patient> GetAllPatients()
+        {
+            return  patientRepo.GetAll();
         }
 
-        async Task IAdminService.AddDoctor(Doctor doctor)
+        //public async Task<Patient> GetPatientById(string id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
+        public async Task<bool> AddCoupon(Coupon coupon)
         {
-            await doctorRepo.AddAsync(doctor);
-            
+            bool result=await couponRepo.AddAsync(coupon);
+            return result;
         }
 
-        void IAdminService.DeactivateCoupon(Coupon coupon)
+        public async Task<bool> EditCoupon(Coupon coupon)
         {
-            throw new NotImplementedException();
+            bool result = await couponRepo.EditAsync(coupon);
+            return result;
         }
 
-        void IAdminService.DeleteCoupon(Coupon coupon)
+        public async  Task<bool> DeleteCoupon(Coupon coupon)
         {
-            throw new NotImplementedException();
+            bool result = await couponRepo.AddAsync(coupon);
+            return result;
         }
 
-         public async Task DeleteDoctorAsync(string id)
-        {
-           Doctor doctor=await doctorRepo.GetByIdAsync(id);
-            if(doctor!=null)
-            {
-                await doctorRepo.DeleteAsync(doctor);
-
-            }
-
-
-
-        }
-
-        void IAdminService.EditCoupon(Coupon coupon)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IAdminService.EditDoctor(Doctor doctor)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<Doctor> IAdminService.GetAllDoctors()
-        {
-            return doctorRepo.GetAll();
-        }
-
-        IEnumerable<Patient> IAdminService.GetAllPatients()
-        {
-            return patientRepo.GetAll();
-        }
-
-        Task<Doctor> IAdminService.GetDoctorById(string id)
-        {
-            return  doctorRepo.GetByIdAsync(id);
-        }
-
-        Patient IAdminService.GetPatientById(string id)
+        Task<bool> IAdminService.DeactivateCoupon(Coupon coupon)
         {
             throw new NotImplementedException();
         }

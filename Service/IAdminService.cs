@@ -13,21 +13,22 @@ namespace Service
         int NumOfDoctors();
         int NumOfPatients();
 
-        Task AddDoctor(Doctor doctor);
-        void EditDoctor(Doctor doctor);
-        Task DeleteDoctorAsync(string id);
-        IEnumerable<Doctor> GetAllDoctors();
-        Task<Doctor> GetDoctorById(string id);
+        Task<bool> AddDoctor(Doctor doctor);
+        Task<bool> EditDoctor(Doctor doctor);
+        Task<bool> DeleteDoctorAsync(Doctor doctor);
+        IEnumerable<Doctor> GetAllDoctors(int page=1 , int pageSize=10);  //duplicated method
+        //Task<Doctor> GetDoctorById(string id);
 
 
         IEnumerable<Patient> GetAllPatients();
-        Patient GetPatientById(string id);
+        //Task<Patient> GetPatientById(string id);
 
 
-        void AddCoupon(Coupon coupon);
-        void EditCoupon(Coupon coupon);
-        void DeleteCoupon(Coupon coupon);
-        void DeactivateCoupon(Coupon coupon);
+        Task<bool> AddCoupon(Coupon coupon);
+        Task<bool>EditCoupon(Coupon coupon);
+        Task<bool> DeleteCoupon(Coupon coupon);
+
+        Task<bool> DeactivateCoupon(Coupon coupon);
 
 
 

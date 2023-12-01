@@ -12,13 +12,7 @@ namespace Data
     {
         public DoctorMap(EntityTypeBuilder<Doctor> entityBuilder)
         {
-            entityBuilder.HasKey(d => d.Id);
-            entityBuilder.Property(d => d.Email).IsRequired().HasMaxLength(30);
-            entityBuilder.Property(d => d.PasswordHash).IsRequired().HasMaxLength(15);
-            entityBuilder.Property(d => d.FirstName).IsRequired().HasMaxLength(30);
-            entityBuilder.Property(d => d.LastName).IsRequired().HasMaxLength(30);
-
-            entityBuilder.Property(d => d.DateOfBirth).IsRequired();
+            entityBuilder.Property(b => b.specialization).IsRequired().HasMaxLength(20);
 
         }
 

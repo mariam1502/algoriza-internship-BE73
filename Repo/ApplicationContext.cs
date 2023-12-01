@@ -17,6 +17,8 @@ namespace Repo
 
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Coupon> Coupons {  get; set; }
+        public DbSet<DoctorAppointment> DoctorAppointments { get; set; }    
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

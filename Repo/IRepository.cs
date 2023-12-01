@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace Repo
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface IRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
+        Task<bool> AddAsync(T user);
+        Task<bool> DeleteAsync(T doctor);
+        Task<bool> EditAsync(T user);
+
+
         Task<T> GetByIdAsync(string id);
-        Task AddAsync(T user);
-        Task EditAsync(T user);
-        Task DeleteAsync(T doctor);
+        Task<T> GetByEmailAsync(string email);
     }
 }

@@ -23,9 +23,26 @@ namespace vezeeta.Net.Controllers
             this.adminService = adminService;
             this.roleManager = roleManager;
         }
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+
+            DashboardModelView model = new DashboardModelView()
+            {
+                NumOfDoctors = adminService.NumOfDoctors(),
+                NumOfPatients= adminService.NumOfPatients(),
+                NumOfRequests=0,
+                NumOfCompletedRequests = 0,
+                Top5Specializations =new List<dynamic>(),
+                Top10Doctors = new List<Doctor>(),
+            };
+            return View(model);
         }
 
         [HttpGet]
@@ -96,9 +113,9 @@ namespace vezeeta.Net.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllDoctors()
+        public IActionResult GetAllDoctors(int? pageNumber)
         {
-            IEnumerable<Doctor> doctors = adminService.GetAllDoctors();
+            IEnumerable<Doctor> doctors =  adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
             IEnumerable<AdminViewModel> models = doctors.Select(x => new AdminViewModel()
             {
                 Id= x.Id,
@@ -141,34 +158,79 @@ namespace vezeeta.Net.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteDoctor(string id)
+        public async Task<IActionResult> DeleteDoctor(string Id)
         {
-            await adminService.DeleteDoctorAsync(id);
-            return RedirectToAction("GetAllDoctors", "Admin");
+            Doctor doctor=adminService.GetAllDoctors().FirstOrDefault(x => x.Id == Id);   
+            bool result=await adminService.DeleteDoctorAsync(doctor);
+            if(result)
+            {
+                return RedirectToAction("GetAllDoctors", "Admin");
+
+            }
+            else
+            {
+                return NotFound();
+            }
         }
+
 
 
         [HttpPost]
         public async Task<IActionResult> EditDoctor(string id)
         {
-            Doctor doctor = await adminService.GetDoctorById(id);
-            //IEnumerable<Doctor> doctor=await adminService.GetDoctorById(id);
+            Doctor doctor = adminService.GetAllDoctors().FirstOrDefault(x => x.Id == id);
+            bool result = await adminService.EditDoctor(doctor);
+            if (result)
+            {
+                return RedirectToAction("GetAllDoctors", "Admin");
 
-            return RedirectToAction("AddDoctor","Admin");
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet]
-        public IActionResult GetNumOfDoctors()
+        public IActionResult Settings()
         {
-            return Ok(adminService.NumOfDoctors());
-
+            return View();
         }
+
         [HttpGet]
-        public IActionResult GetNumOfPatients()
+        public IActionResult AddCoupon()
         {
-            return Ok(adminService.NumOfPatients());
-
+            return View();
         }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddCoupon(CouponViewModel model)
+        {
+            Coupon coupon = new Coupon()
+            {
+                 CouponCode = model.CouponCode, 
+                 DisccountType=model.DiscountType,
+                 NumOfRequests=model.NumOfRequests, 
+            };
+            var result = await adminService.AddCoupon(coupon);
+            if (result)
+            {
+                return View();
+
+            }
+            return NotFound();
+            //return Ok(result);
+        }
+
+        
+
+
+
+
+
 
 
 

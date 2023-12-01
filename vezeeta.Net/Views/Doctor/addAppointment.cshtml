@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "_Layout1";
+
+}
+@model vezeeta.Net.Models.ViewModel.Doctor.AppointmentViewModel;
+
+<h1>AddAppointment Page </h1>
+
+
+<form asp-controller="Doctor" asp-action="AddAppointment" method="post">
+
+
+ 
+    <div>
+        <label asp-for="Days"></label>
+         <select asp-for="Days">
+                 
+            <option value=0>Saturday</option>
+            <option value=1 >Sunday</option>
+            <option value=2>Monday</option>
+            <option value=3 >Tuesday</option>
+            <option value=4>Wednesday</option>
+            <option value=5 >Thursday</option>
+            <option value=6>Friday</option>
+
+
+        </select>
+      
+    </div><br />
+
+    <div>
+        <label asp-for="From"></label>
+        <input type="time" name="From">
+    </div><br />
+
+
+    <div>
+        <label asp-for="To"></label>
+        <input type="time" name="To">
+
+    <br />
+     <div>
+        <label asp-for="Price"></label>
+         <input asp-for="Price" />
+         </div>
+    <br />
+    <br>
+
+    <button type="submit">Add</button>
+
+
+
+</form>

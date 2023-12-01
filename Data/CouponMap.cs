@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class PatientMap
+    public class CouponMap
     {
-        public PatientMap(EntityTypeBuilder<Patient> entityBuilder)
+        public CouponMap(EntityTypeBuilder<Coupon> entityBuilder)
         {
+            entityBuilder.Property(c => c.Id).ValueGeneratedOnAdd();
 
         }
     }

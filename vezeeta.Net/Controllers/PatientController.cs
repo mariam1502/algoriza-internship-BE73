@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using System.Data;
 using vezeeta.Net.Models.ViewModel.Admin;
 
 namespace vezeeta.Net.Controllers
@@ -14,17 +15,20 @@ namespace vezeeta.Net.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private IPatientService patientService;
+        private IRoleService patientRole;
 
-        public PatientController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IPatientService patientService)
+        public PatientController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IPatientService patientService, IRoleService patientRole)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.patientService = patientService;
+            this.patientRole = patientRole;
+
         }
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("GetAllDoctors","Admin");
         }
         [HttpGet]
         public IActionResult Register()
@@ -47,14 +51,27 @@ namespace vezeeta.Net.Controllers
 
             };
             await patientService.Register(patient);
+            string patientId = (await userManager.FindByEmailAsync(patient.Email)).Id;
+            ////await patientRole.AddUserRole(patientId, "Patient");
+            IdentityUser p = await userManager.FindByIdAsync(patientId);
+            //IdentityResult pp=await userManager.AddToRoleAsync(p, "patient");
+
+
+            //return Ok(await patientService.test(patient));
+
+
             if (!roleManager.RoleExistsAsync("Patient").Result)
             {
                 var doctorRole = new IdentityRole("Patient");
                 roleManager.CreateAsync(doctorRole).Wait();
             }
-            userManager.AddToRoleAsync(patient, "Patient").Wait();
-            return RedirectToAction("login","admin");
-        
+            IdentityResult result =await  userManager.AddToRoleAsync(p, "PATIENT");
+           
+          
+            return Ok(result.Errors);
+
+            //userManager.AddToRoleAsync(patient, "Patient").Wait();
+
         }
     }
 }
