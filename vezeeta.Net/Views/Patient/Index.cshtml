@@ -1,70 +1,35 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<h1>This is the Home page of Patients</h1>
-
-@{
+﻿@{
     Layout = "_Layout1";
-
-
 }
+@model Microsoft.AspNetCore.Identity.IdentityUser
 
-<h1>Get All @ViewBag.GetAll Page</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Specialization</th>
-            <th>Phone Number</th>
-             <th>Action</th>
-               
-        </tr>
-    </thead>
-   <tbody>
-        @foreach (var eachModel in Model)
-        {
-            <tr>
-                <td>@eachModel.Id</td>
-
-                <td>@eachModel.FirstName</td>
-                <td>@eachModel.LastName</td>
-                <td>@eachModel.Email</td>
-                <td>@eachModel.specialization</td>
-                <td>@eachModel.PhoneNumber</td>
-                <th>
-
-                <form asp-controller="Admin" asp-action="DeleteDoctor" method="post">
-                    <input type="hidden" name="Id" value=@eachModel.Id />
-                    <button type="submit">Book</button>
-
-                </form>
-
-                 </th>
-
-
-
-
-               
-            </tr>
-
-        }
-    </tbody>
-</table>
+<h1>Patient Home Page</h1>
 
 @{
-    for(int x=1;x<=10;x++)
+    if (Model != null)
     {
-         <form asp-controller="Admin" asp-action="GetAllDoctors" method="get">
-         <input type="hidden" name="pageNumber" value=@x />
+        <p> Hello , @Model.UserName </p>
+        <br />
+        <a asp-asp-controller="admin" asp-action="logout">Logout</a>
+        <br />
+        <p> Go to</p>
 
-         <button type="submit">@x</button>
-        </form>
+
+        <a asp-controller="Admin" asp-action="GetAllDoctors">Get All Doctors</a>
+        <br />
+        <a asp-controller="Admin" asp-action="">Get a Doctor By Id</a>
+        <br />
+
+
+
+
+
+
+    }
+    else
+    {
+        <p>please login</p>
+        <a asp-asp-controller="admin" asp-action="login">Login</a>
+        <br />
     }
 }

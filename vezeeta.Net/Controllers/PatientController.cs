@@ -7,6 +7,9 @@ using vezeeta.Net.Models.ViewModel.Admin;
 
 namespace vezeeta.Net.Controllers
 {
+    //[ApiController]
+    //[Route("[controller]")]
+
     [Route("[controller]/[action]")]
     public class PatientController : Controller
     {
@@ -24,11 +27,14 @@ namespace vezeeta.Net.Controllers
             this.roleManager = roleManager;
             this.patientService = patientService;
             this.patientRole = patientRole;
+            
 
         }
+        [HttpGet]
         public IActionResult Index()
         {
-            return RedirectToAction("GetAllDoctors","Admin");
+            //return Ok("here");
+            return RedirectToAction("GetAllDoctors", "Admin");
         }
         [HttpGet]
         public IActionResult Register()
@@ -48,29 +54,30 @@ namespace vezeeta.Net.Controllers
                 Gendre = model.Gendre,
                 Email = model.Email,
                 NormalizedEmail = model.Email,
+                UserName=model.FirstName+model.LastName,
 
             };
-            await patientService.Register(patient);
-            string patientId = (await userManager.FindByEmailAsync(patient.Email)).Id;
-            ////await patientRole.AddUserRole(patientId, "Patient");
-            IdentityUser p = await userManager.FindByIdAsync(patientId);
-            //IdentityResult pp=await userManager.AddToRoleAsync(p, "patient");
+            var registerResult = await patientService.Register(patient);
+            IdentityUser addedPatient = await userManager.FindByEmailAsync(patient.Email);
 
-
-            //return Ok(await patientService.test(patient));
-
-
-            if (!roleManager.RoleExistsAsync("Patient").Result)
+            if (registerResult && addedPatient != null)
             {
-                var doctorRole = new IdentityRole("Patient");
-                roleManager.CreateAsync(doctorRole).Wait();
-            }
-            IdentityResult result =await  userManager.AddToRoleAsync(p, "PATIENT");
-           
-          
-            return Ok(result.Errors);
+                if (!await roleManager.RoleExistsAsync("Patient"))
+                {
+                    var patientRole = new IdentityRole("Patient");
+                    await roleManager.CreateAsync(patientRole);
+                }
+                var roleResult = await userManager.AddToRoleAsync(addedPatient, "Patient");
 
-            //userManager.AddToRoleAsync(patient, "Patient").Wait();
+                if (roleResult.Succeeded)
+                {
+                    return RedirectToAction("login", "admin");
+                }
+
+            }
+
+            return NotFound();
+
 
         }
     }

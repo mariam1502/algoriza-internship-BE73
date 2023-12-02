@@ -5,6 +5,9 @@ using vezeeta.Net.Models.ViewModel.Doctor;
 
 namespace vezeeta.Net.Controllers
 {
+    //[ApiController]
+    //[Route("[controller]")]
+
     public class DoctorController:Controller
     {
         private IDoctorService doctorService;
@@ -27,21 +30,21 @@ namespace vezeeta.Net.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddAppointment(AppointmentViewModel model) 
+        [HttpPost("{model}")]
+        public async Task<IActionResult> AddAppointment(AppointmentViewModel model)
         {
             DoctorAppointment appointment = new DoctorAppointment()
             {
                 Days = model.Days,
                 DoctorId = model.DoctorId,
-                From = model.From,  
+                From = model.From,
                 To = model.To,
                 Price = model.Price
-                 
+
             };
 
-            bool result=await doctorService.AddAppointment(appointment);
-            if(result)
+            bool result = await doctorService.AddAppointment(appointment);
+            if (result)
             {
                 return RedirectToAction("Settings", "Doctor");
 

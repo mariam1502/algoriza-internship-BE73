@@ -30,6 +30,10 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddTransient<IPatientService, PatientService>();
 
 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationBuilder();
+
+
 
 
 
@@ -58,6 +62,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+//app.MapControllers();
+//app.MapIdentityApi<IdentityUser>();
 
 app.Run();

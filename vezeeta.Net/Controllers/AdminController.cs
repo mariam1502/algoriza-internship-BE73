@@ -5,10 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Linq;
 using vezeeta.Net.Models.ViewModel.Admin;
 
 namespace vezeeta.Net.Controllers
 {
+    //[ApiController]
+    //[Route("[controller]")]
+
     [Route("[controller]/[action]")]
     public class AdminController:Controller
     {
@@ -26,6 +30,7 @@ namespace vezeeta.Net.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            //return Ok("here");
             return View();
         }
 
@@ -36,17 +41,17 @@ namespace vezeeta.Net.Controllers
             DashboardModelView model = new DashboardModelView()
             {
                 NumOfDoctors = adminService.NumOfDoctors(),
-                NumOfPatients= adminService.NumOfPatients(),
-                NumOfRequests=0,
+                NumOfPatients = adminService.NumOfPatients(),
+                NumOfRequests = 0,
                 NumOfCompletedRequests = 0,
-                Top5Specializations =new List<dynamic>(),
+                Top5Specializations = new List<dynamic>(),
                 Top10Doctors = new List<Doctor>(),
             };
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Login( )
+        public IActionResult Login()
         {
             //adminService.NumOfDoctors()
             return View();
@@ -55,7 +60,7 @@ namespace vezeeta.Net.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login( AdminViewModel model)
+        public async Task<IActionResult> Login(AdminViewModel model)
         {
             //if (ModelState.IsValid) 
             {
@@ -65,8 +70,17 @@ namespace vezeeta.Net.Controllers
                     if (user.PasswordHash == model.PasswordHash)
                     {
                         await signInManager.SignInAsync(user, isPersistent: false);
-                        return View("Views/Admin/index.cshtml", user);
+                        var roles = userManager.GetRolesAsync(user);
+                        string userRole = roles.Result.FirstOrDefault();
+
+                        return View("~/Views/" + userRole.ToString() + "/index.cshtml", user);
+
+
+
+                        //return View("Views/Admin/index.cshtml", user);
+                        //return Ok(user);
                     }
+
                     return Ok("Password incorrect");
                 }
                 return Ok("User NOt Found!");
@@ -89,15 +103,15 @@ namespace vezeeta.Net.Controllers
         {
             Doctor doctor = new Doctor()
             {
-                FirstName = model.FirstName,    
+                FirstName = model.FirstName,
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
                 PasswordHash = model.PasswordHash,
-                specialization=model.specialization,
-                Image=model.Image,
-                Gendre=model.Gendre,
-                Email=model.Email,
-                NormalizedEmail=model.Email
+                specialization = model.specialization,
+                Image = model.Image,
+                Gendre = model.Gendre,
+                Email = model.Email,
+                NormalizedEmail = model.Email
 
             };
 
@@ -115,19 +129,19 @@ namespace vezeeta.Net.Controllers
         [HttpGet]
         public IActionResult GetAllDoctors(int? pageNumber)
         {
-            IEnumerable<Doctor> doctors =  adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
+            IEnumerable<Doctor> doctors = adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
             IEnumerable<AdminViewModel> models = doctors.Select(x => new AdminViewModel()
             {
-                Id= x.Id,
-                Email=x.Email,
-                FirstName=x.FirstName,
-                LastName=x.LastName,
-                PhoneNumber=x.PhoneNumber,
-                specialization=x.specialization,
-                Image=x.Image,
-                Gendre=x.Gendre,
-                DateOfBirth=x.DateOfBirth,
-                PasswordHash=x.PasswordHash,
+                Id = x.Id,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                PhoneNumber = x.PhoneNumber,
+                specialization = x.specialization,
+                Image = x.Image,
+                Gendre = x.Gendre,
+                DateOfBirth = x.DateOfBirth,
+                PasswordHash = x.PasswordHash,
                 NormalizedEmail = x.Email
             });
             ViewBag.GetAll = "Doctors";
@@ -150,7 +164,7 @@ namespace vezeeta.Net.Controllers
                 Gendre = x.Gendre,
                 DateOfBirth = x.DateOfBirth,
                 PasswordHash = x.PasswordHash,
-                NormalizedEmail=x.Email
+                NormalizedEmail = x.Email
             });
             ViewBag.GetAll = "Patients";
             return View("getAll", models);
@@ -160,9 +174,9 @@ namespace vezeeta.Net.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteDoctor(string Id)
         {
-            Doctor doctor=adminService.GetAllDoctors().FirstOrDefault(x => x.Id == Id);   
-            bool result=await adminService.DeleteDoctorAsync(doctor);
-            if(result)
+            Doctor doctor = adminService.GetAllDoctors().FirstOrDefault(x => x.Id == Id);
+            bool result = await adminService.DeleteDoctorAsync(doctor);
+            if (result)
             {
                 return RedirectToAction("GetAllDoctors", "Admin");
 
@@ -211,9 +225,9 @@ namespace vezeeta.Net.Controllers
         {
             Coupon coupon = new Coupon()
             {
-                 CouponCode = model.CouponCode, 
-                 DisccountType=model.DiscountType,
-                 NumOfRequests=model.NumOfRequests, 
+                CouponCode = model.CouponCode,
+                DisccountType = model.DiscountType,
+                NumOfRequests = model.NumOfRequests,
             };
             var result = await adminService.AddCoupon(coupon);
             if (result)
@@ -225,7 +239,7 @@ namespace vezeeta.Net.Controllers
             //return Ok(result);
         }
 
-        
+
 
 
 
