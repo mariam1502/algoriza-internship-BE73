@@ -9,5 +9,7 @@ namespace Data
     public class Doctor: BaseEntity
     {
         public string specialization {  get; set; }
+        public string DoctorAppointmentId { get; set; }
+        public DoctorAppointment DoctorAppointment { get; set; }
     }
 }

@@ -11,14 +11,39 @@ namespace Service
     public class DoctorService : IDoctorService
     {
         private IRepository<DoctorAppointment> appointmentRepo;
-        public DoctorService(IRepository<DoctorAppointment> appointmentRepo) 
+        private IRepository<Time> timeRepo;
+        private IRepository<Day> dayRepo;
+
+
+        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo) 
         {
             this.appointmentRepo = appointmentRepo;
+            this.timeRepo = timeRepo;
+            this.dayRepo = dayRepo;
         }  
         public async Task<bool> AddAppointment(DoctorAppointment appointment)
         {
-            bool result=await appointmentRepo.AddAsync(appointment);
+            bool result = await appointmentRepo.AddAsync(appointment);
             return result;
+        }
+        public async Task<bool> AddDayTime(Day day , Time time,string currentDrId,Days weekday)
+        {
+            DoctorAppointment doctorAppointment = appointmentRepo.GetAll().FirstOrDefault(x => x.DoctorId == currentDrId);
+            int doctorAppointmentId= day.DoctorAppointmentId = doctorAppointment.Id;
+            bool dayResult = await dayRepo.AddAsync(day);
+
+            if(dayResult)
+            {
+                Day currentDay = dayRepo.GetAll().FirstOrDefault(x => x.DoctorAppointmentId == doctorAppointmentId && x.WeekDay == weekday);
+                int currentDayId = currentDay.Id;
+                time.DayId = currentDayId;  
+                bool timeResult = await timeRepo.AddAsync(time);
+                if (timeResult)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

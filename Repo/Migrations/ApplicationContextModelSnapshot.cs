@@ -45,7 +45,28 @@ namespace Repo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Coupons");
+                    b.ToTable("Coupons", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Day", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DoctorAppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WeekDay")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorAppointmentId");
+
+                    b.ToTable("Day", (string)null);
                 });
 
             modelBuilder.Entity("Data.DoctorAppointment", b =>
@@ -56,26 +77,43 @@ namespace Repo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Days")
-                        .HasColumnType("int");
-
                     b.Property<string>("DoctorId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<TimeOnly>("From")
-                        .HasColumnType("time");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId")
+                        .IsUnique();
+
+                    b.ToTable("DoctorAppointments", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Time", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DayId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly>("From")
+                        .HasColumnType("time");
 
                     b.Property<TimeOnly>("To")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DayId");
 
-                    b.ToTable("DoctorAppointments");
+                    b.ToTable("Time", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -215,14 +253,14 @@ namespace Repo.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7d7116da-f365-4a56-9f59-8aa86f00a3d0",
+                            ConcurrencyStamp = "bbcedbae-4355-4eb8-b980-c475488ba4f5",
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "Admin@gmail.com",
                             PasswordHash = "Admin@123",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "51965c71-807d-4677-abbe-a82d2b50e5e0",
+                            SecurityStamp = "61b76443-9429-4ff0-8eec-4c6a96272224",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -324,6 +362,10 @@ namespace Repo.Migrations
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DoctorAppointmentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .ValueGeneratedOnUpdateSometimes()
@@ -382,13 +424,37 @@ namespace Repo.Migrations
                     b.HasDiscriminator().HasValue("Patient");
                 });
 
+            modelBuilder.Entity("Data.Day", b =>
+                {
+                    b.HasOne("Data.DoctorAppointment", "DoctorAppointment")
+                        .WithMany("Days")
+                        .HasForeignKey("DoctorAppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DoctorAppointment");
+                });
+
             modelBuilder.Entity("Data.DoctorAppointment", b =>
                 {
                     b.HasOne("Data.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId");
+                        .WithOne("DoctorAppointment")
+                        .HasForeignKey("Data.DoctorAppointment", "DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("Data.Time", b =>
+                {
+                    b.HasOne("Data.Day", "Day")
+                        .WithMany("Time")
+                        .HasForeignKey("DayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Day");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -439,6 +505,22 @@ namespace Repo.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Data.Day", b =>
+                {
+                    b.Navigation("Time");
+                });
+
+            modelBuilder.Entity("Data.DoctorAppointment", b =>
+                {
+                    b.Navigation("Days");
+                });
+
+            modelBuilder.Entity("Data.Doctor", b =>
+                {
+                    b.Navigation("DoctorAppointment")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

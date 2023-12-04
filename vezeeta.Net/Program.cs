@@ -17,7 +17,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlDB")));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-        .AddEntityFrameworkStores<ApplicationContext>();
+        .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
+
+
 builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
 builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IDoctorService, DoctorService>();
@@ -49,18 +51,17 @@ if (app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
 });
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 //app.MapControllers();
 //app.MapIdentityApi<IdentityUser>();

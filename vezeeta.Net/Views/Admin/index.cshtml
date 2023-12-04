@@ -2,46 +2,41 @@
 @{
     Layout = "_Layout1";
 }
-@model Microsoft.AspNetCore.Identity.IdentityUser
 
 <h1>Admin Home Page</h1>
 @{
-    if(Model!=null)
-    {  
-        <p> Hello , @Model.UserName </p><br />
-        <a asp-asp-controller="admin" asp-action="logout">Logout</a>
-        <br />
-        <p> Dashboard methods</p>
+     if(User.Identity.IsAuthenticated)
+        {
+        <p> Hello ,@User.Identity.Name </p>
+            <br />
+            <a asp-asp-controller="admin" asp-action="logout">Logout</a>
+            <br />
+            <p> Dashboard methods</p>
+
+
+            <a asp-controller="Admin" asp-action="GetAllDoctors">Get All Doctors</a>
+            <br />
+            <a asp-controller="Admin" asp-action="">Get a Doctor By Id</a>
+            <br />
+
+            <a asp-controller="Admin" asp-action="AddDoctor">Add a Doctor</a>
+            <br />
+
+            <hr />
+
+
+            <a asp-controller="Admin" asp-action="GetAllPatients">Get All Patients</a>
+            <br />
+            <a asp-controller="Admin" asp-action="">Get a Patient By Id</a>
+            <br />
+
+            <hr />
+
+        <a asp-controller="Admin" asp-action="settings">Settings</a>
+            <br />
+           
+
+        }
         
 
-        <a asp-controller="Admin" asp-action="GetAllDoctors">Get All Doctors</a>
-        <br />
-        <a asp-controller="Admin" asp-action="">Get a Doctor By Id</a><br />
-
-        <a asp-controller="Admin" asp-action="AddDoctor">Add a Doctor</a>
-        <br />
-
-        <hr />
-
-
-        <a asp-controller="Admin" asp-action="GetAllPatients">Get All Patients</a><br />
-        <a asp-controller="Admin" asp-action="">Get a Patient By Id</a><br />
-
-        <hr />
-
-        <a asp-controller="Admin" asp-action="">Add a Coupon</a><br />
-        <a asp-controller="Admin" asp-action="">Edit a Coupon</a><br />
-        <a asp-controller="Admin" asp-action="">Delete a Coupon</a><br />
-        <a asp-controller="Admin" asp-action="">Deactivate a Coupon</a><br />
-
-
-
-
-
-    }
-    else
-    {
-        <p>please login</p>
-        <a asp-asp-controller="admin" asp-action="login">Login</a><br />
-    }
 }

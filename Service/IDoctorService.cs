@@ -15,6 +15,8 @@ namespace Service
         //ViewAllBooking
 
         Task<bool> AddAppointment(DoctorAppointment appointment);
+        Task<bool> AddDayTime(Day day, Time time, string currentDrId ,Days wekkday);
+
         //Editappointment
         //Deleteappointment
 

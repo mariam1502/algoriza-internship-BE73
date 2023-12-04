@@ -1,4 +1,5 @@
 ﻿using Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -11,6 +12,8 @@ namespace vezeeta.Net.Controllers
     //[Route("[controller]")]
 
     [Route("[controller]/[action]")]
+    [Authorize(Roles = "Patient")]
+
     public class PatientController : Controller
     {
 
@@ -37,6 +40,7 @@ namespace vezeeta.Net.Controllers
             return RedirectToAction("GetAllDoctors", "Admin");
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();

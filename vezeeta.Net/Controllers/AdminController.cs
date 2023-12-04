@@ -7,6 +7,8 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Linq;
 using vezeeta.Net.Models.ViewModel.Admin;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace vezeeta.Net.Controllers
 {
@@ -14,6 +16,7 @@ namespace vezeeta.Net.Controllers
     //[Route("[controller]")]
 
     [Route("[controller]/[action]")]
+    [Authorize(Roles ="Admin")]
     public class AdminController:Controller
     {
         private readonly UserManager<IdentityUser> userManager;
@@ -28,9 +31,11 @@ namespace vezeeta.Net.Controllers
             this.roleManager = roleManager;
         }
         [HttpGet]
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
             //return Ok("here");
+            //await userManager.GetClaimsAsync(user);
             return View();
         }
 
@@ -51,6 +56,7 @@ namespace vezeeta.Net.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             //adminService.NumOfDoctors()
@@ -60,6 +66,7 @@ namespace vezeeta.Net.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(AdminViewModel model)
         {
             //if (ModelState.IsValid) 
@@ -67,28 +74,26 @@ namespace vezeeta.Net.Controllers
                 IdentityUser user = await userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
+
                     if (user.PasswordHash == model.PasswordHash)
                     {
-                        await signInManager.SignInAsync(user, isPersistent: false);
+                        Claim claim = new Claim("Id", user.Id);
+                        var result = await userManager.AddClaimAsync(user, claim);
+
+                        await signInManager.SignInAsync(user, isPersistent: true);
                         var roles = userManager.GetRolesAsync(user);
                         string userRole = roles.Result.FirstOrDefault();
+                        var calim =await userManager.GetClaimsAsync(user);
 
-                        return View("~/Views/" + userRole.ToString() + "/index.cshtml", user);
-
-
-
-                        //return View("Views/Admin/index.cshtml", user);
-                        //return Ok(user);
+                        //return Ok(claim.Value);
+                        return View("~/Views/" + userRole.ToString() + "/index.cshtml");
+                        //return RedirectToAction("index", "admin");
                     }
 
                     return Ok("Password incorrect");
                 }
                 return Ok("User NOt Found!");
             }
-
-
-
-            //return Ok("Required");
 
         }
 
@@ -111,7 +116,8 @@ namespace vezeeta.Net.Controllers
                 Image = model.Image,
                 Gendre = model.Gendre,
                 Email = model.Email,
-                NormalizedEmail = model.Email
+                NormalizedEmail = model.Email,
+                UserName=model.FirstName+model.LastName
 
             };
 

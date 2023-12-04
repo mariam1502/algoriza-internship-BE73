@@ -8,14 +8,13 @@ namespace Data
 {
     public class DoctorAppointment
     {
-        public int Id { get; set; } 
-        public Days Days { get; set; }  
-        public TimeOnly From { get; set; }
-        public TimeOnly To { get; set; }
+        public int Id { get; set; }
         public float Price { get; set; }
         public string DoctorId { get; set; }
 
-        public Doctor Doctor { get; set; }
 
+        public List<Day> Days { get; set; }
+        public Doctor Doctor { get; set; }
+    
     }
 }
