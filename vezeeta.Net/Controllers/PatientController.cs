@@ -92,32 +92,6 @@ namespace vezeeta.Net.Controllers
         public  async Task<IActionResult> GetAllDoctors(int? pageNumber)
         {
             IEnumerable<Doctor> doctors =  await adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
-            IEnumerable<PatientBookViewModel> models = doctors.Select(x => new PatientBookViewModel()
-            {
-                Id = x.Id,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                PhoneNumber = x.PhoneNumber,
-                specialization = x.specialization,
-                Image = x.Image,
-                Gendre = x.Gendre,
-                DateOfBirth = x.DateOfBirth,
-                PasswordHash = x.PasswordHash,
-                NormalizedEmail = x.Email,
-                
-
-            });
-            ViewBag.GetAll = "Doctors";
-            return View(doctors);
-            //return Ok(doctors.First());
-        }
-
-
-        [HttpGet]
-        public IActionResult DoctorSchedule()
-        {
-            //IEnumerable<Doctor> doctors = adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
             //IEnumerable<PatientBookViewModel> models = doctors.Select(x => new PatientBookViewModel()
             //{
             //    Id = x.Id,
@@ -130,13 +104,29 @@ namespace vezeeta.Net.Controllers
             //    Gendre = x.Gendre,
             //    DateOfBirth = x.DateOfBirth,
             //    PasswordHash = x.PasswordHash,
-            //    NormalizedEmail = x.Email
+            //    NormalizedEmail = x.Email,
 
+                
 
             //});
-            //ViewBag.GetAll = "Doctors";
-            //return Ok("hello");
-            return View();
+            ViewBag.GetAll = "Doctors";
+            return View(doctors);
+            //return Ok(doctors.First());
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> DoctorSchedule(int appointmentId)
+
+        {
+            IEnumerable<Day>  schedule=  await patientService.GetAllDoctorSchedule(appointmentId);
+            return View(schedule);
+        }
+
+        [HttpPost]
+        public IActionResult Book()
+        {
+            return Ok();
         }
 
 

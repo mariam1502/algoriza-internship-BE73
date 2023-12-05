@@ -58,8 +58,8 @@
                             <br />
 
 
-                            <form asp-controller="Patient" asp-action="DoctorSchedule" method="post">
-                                <input type="hidden" name="DoctorId" value=@eachModel.Id />
+                            <form asp-controller="Patient" asp-action="DoctorSchedule" method="get">
+                                <input type="hidden" name="appointmentId" value=@eachModel.DoctorAppointment.Id />
                                 <button type="submit">View</button>
 
                             </form>

@@ -1,4 +1,5 @@
 ﻿using Data;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Repo
         Task<bool> EditAsync(T user);
 
 
-        Task<T> GetByIdAsync(string id);
+        Task<IdentityUser> GetByIdAsync(string id);
         Task<T> GetByEmailAsync(string email);
     }
 }

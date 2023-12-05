@@ -1,4 +1,5 @@
 ﻿using Data;
+using Microsoft.AspNetCore.Identity;
 using Repo;
 using System;
 using System.Collections.Generic;
@@ -13,18 +14,33 @@ namespace Service
         private IRepository<DoctorAppointment> appointmentRepo;
         private IRepository<Time> timeRepo;
         private IRepository<Day> dayRepo;
+        private IRepository<Doctor> doctorRepo;
+        private readonly UserManager<IdentityUser> userManager;
 
-
-        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo) 
+        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo, IRepository<Doctor> doctorRepo, UserManager<IdentityUser> userManager) 
         {
             this.appointmentRepo = appointmentRepo;
             this.timeRepo = timeRepo;
             this.dayRepo = dayRepo;
+            this.doctorRepo = doctorRepo;
+            this.userManager = userManager; 
         }  
         public async Task<bool> AddAppointment(DoctorAppointment appointment)
         {
+            
             bool result = await appointmentRepo.AddAsync(appointment);
-            return result;
+            if(result)
+            {
+                Doctor updatedDoctor =(Doctor)await userManager.FindByIdAsync(appointment.DoctorId);
+                updatedDoctor.DoctorAppointmentId = appointment.Id.ToString();
+                bool updateDoctorResult = await doctorRepo.EditAsync(updatedDoctor);
+                if(updateDoctorResult)
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
         public async Task<bool> AddDayTime(Day day , Time time,string currentDrId,Days weekday)
         {

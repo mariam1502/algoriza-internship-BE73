@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "_Layout1";
 }
+@using Data;
+@model IEnumerable<Day>;
 <h1>Doctor Appointments</h1>
 
 
@@ -15,13 +17,18 @@
         </tr>
     </thead>
     <tbody>
-       @*  @foreach (var eachModel in Model)
+        @foreach (var eachModel in Model)
         {
             <tr>
 
-                <td>@eachModel.FirstName</td>
-                <td>@eachModel.LastName</td>
-                <td>@eachModel.Email</td>
+                <td>@eachModel.WeekDay</td>
+
+                @foreach(var time in eachModel.Times)
+                {
+                    <td>@time.From</td>
+                    <td>@time.To</td>
+                
+              
                 <th>             
                 <form asp-controller="Patient" asp-action="Book" method="post">
                     <input type="hidden" name="Id" value=@eachModel.Id />
@@ -30,8 +37,9 @@
                 </form>
 
                 </th>
+                }
             </tr>
 
-        } *@
+        }
     </tbody>
 </table>

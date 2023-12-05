@@ -49,13 +49,14 @@ namespace Repo
 
 
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<IdentityUser> GetByIdAsync(string id)
         {
-            //T itemToGet = await _entity.FirstOrDefaultAsync<T>(e => e.Id == id);
-            //if(itemToGet != null)
+            //T user = await _context.Set<IdentityUser>().SingleOrDefaultAsync(u => u.Id == id);
+            //if (user != null)
             //{
-            //    return itemToGet;
+            //    return user;
             //}
+
             throw new Exception($"Entity with ID {id} not found.");
 
         }

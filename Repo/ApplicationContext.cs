@@ -22,6 +22,7 @@ namespace Repo
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Coupon> Coupons {  get; set; }
         public DbSet<DoctorAppointment> DoctorAppointments { get; set; }
+        public DbSet<Book> Books { get; set; }
 
 
 
