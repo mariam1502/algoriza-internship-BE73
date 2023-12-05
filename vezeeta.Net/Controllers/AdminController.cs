@@ -9,8 +9,10 @@ using System.Linq;
 using vezeeta.Net.Models.ViewModel.Admin;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace vezeeta.Net.Controllers
+
+namespace vezeeta.Net.Controllersf
 {
     //[ApiController]
     //[Route("[controller]")]
@@ -40,13 +42,13 @@ namespace vezeeta.Net.Controllers
         }
 
         [HttpGet]
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
 
             DashboardModelView model = new DashboardModelView()
             {
-                NumOfDoctors = adminService.NumOfDoctors(),
-                NumOfPatients = adminService.NumOfPatients(),
+                NumOfDoctors = await adminService.NumOfDoctors(),
+                NumOfPatients = await adminService.NumOfPatients(),
                 NumOfRequests = 0,
                 NumOfCompletedRequests = 0,
                 Top5Specializations = new List<dynamic>(),
@@ -133,9 +135,9 @@ namespace vezeeta.Net.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllDoctors(int? pageNumber)
+        public async Task<IActionResult> GetAllDoctors(int? pageNumber)
         {
-            IEnumerable<Doctor> doctors = adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
+            IEnumerable<Doctor> doctors = await adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
             IEnumerable<AdminViewModel> models = doctors.Select(x => new AdminViewModel()
             {
                 Id = x.Id,
@@ -156,9 +158,9 @@ namespace vezeeta.Net.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAllPatients()
+        public async Task<IActionResult> GetAllPatients()
         {
-            IEnumerable<Patient> patients = adminService.GetAllPatients();
+            IEnumerable<Patient> patients = await adminService.GetAllPatients();
             IEnumerable<AdminViewModel> models = patients.Select(x => new AdminViewModel()
             {
                 Id = x.Id,
@@ -180,7 +182,11 @@ namespace vezeeta.Net.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteDoctor(string Id)
         {
-            Doctor doctor = adminService.GetAllDoctors().FirstOrDefault(x => x.Id == Id);
+            IEnumerable<Doctor> doctors = await adminService.GetAllDoctors();
+
+            // Now you can use FirstOrDefault on the result
+            Doctor doctor = doctors.FirstOrDefault(x => x.Id == Id);
+
             bool result = await adminService.DeleteDoctorAsync(doctor);
             if (result)
             {
@@ -198,7 +204,9 @@ namespace vezeeta.Net.Controllers
         [HttpPost]
         public async Task<IActionResult> EditDoctor(string id)
         {
-            Doctor doctor = adminService.GetAllDoctors().FirstOrDefault(x => x.Id == id);
+            IEnumerable<Doctor> doctors = await adminService.GetAllDoctors();
+
+            Doctor doctor = doctors.FirstOrDefault(x => x.Id == id);
             bool result = await adminService.EditDoctor(doctor);
             if (result)
             {

@@ -28,13 +28,18 @@ namespace Service
         }
         public async Task<bool> AddDayTime(Day day , Time time,string currentDrId,Days weekday)
         {
-            DoctorAppointment doctorAppointment = appointmentRepo.GetAll().FirstOrDefault(x => x.DoctorId == currentDrId);
+            IEnumerable<DoctorAppointment> doctorAppointments = await appointmentRepo.GetAll();
+            DoctorAppointment doctorAppointment=  doctorAppointments.FirstOrDefault(x => x.DoctorId == currentDrId);
+
+
             int doctorAppointmentId= day.DoctorAppointmentId = doctorAppointment.Id;
             bool dayResult = await dayRepo.AddAsync(day);
 
             if(dayResult)
             {
-                Day currentDay = dayRepo.GetAll().FirstOrDefault(x => x.DoctorAppointmentId == doctorAppointmentId && x.WeekDay == weekday);
+                IEnumerable<Day> days = await dayRepo.GetAll();
+                Day currentDay = days.FirstOrDefault(x => x.DoctorAppointmentId == doctorAppointmentId && x.WeekDay == weekday);
+
                 int currentDayId = currentDay.Id;
                 time.DayId = currentDayId;  
                 bool timeResult = await timeRepo.AddAsync(time);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data
@@ -13,7 +14,8 @@ namespace Data
         public TimeOnly From { get; set; }
         public TimeOnly To { get; set; }
 
-        public Day Day { get; set; }
+        [JsonIgnore]
+        public virtual Day Day { get; set; }
 
 
     }

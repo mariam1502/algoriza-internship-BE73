@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data
@@ -12,9 +13,11 @@ namespace Data
         public float Price { get; set; }
         public string DoctorId { get; set; }
 
+        [JsonIgnore]
+        public virtual List<Day> Days { get; set; }
+        [JsonIgnore]
 
-        public List<Day> Days { get; set; }
-        public Doctor Doctor { get; set; }
-    
+        public virtual Doctor Doctor { get; set; }
+
     }
 }

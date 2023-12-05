@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Data;
 using vezeeta.Net.Models.ViewModel.Admin;
+using vezeeta.Net.Models.ViewModel.Patient;
 
 namespace vezeeta.Net.Controllers
 {
@@ -21,15 +22,17 @@ namespace vezeeta.Net.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private IPatientService patientService;
+        private readonly IAdminService adminService;
         private IRoleService patientRole;
 
-        public PatientController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IPatientService patientService, IRoleService patientRole)
+        public PatientController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IPatientService patientService, IRoleService patientRole, IAdminService adminService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.patientService = patientService;
             this.patientRole = patientRole;
+            this.adminService = adminService;
             
 
         }
@@ -37,7 +40,7 @@ namespace vezeeta.Net.Controllers
         public IActionResult Index()
         {
             //return Ok("here");
-            return RedirectToAction("GetAllDoctors", "Admin");
+            return View();
         }
         [HttpGet]
         [AllowAnonymous]
@@ -84,5 +87,58 @@ namespace vezeeta.Net.Controllers
 
 
         }
+
+        [HttpGet]
+        public  async Task<IActionResult> GetAllDoctors(int? pageNumber)
+        {
+            IEnumerable<Doctor> doctors =  await adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
+            IEnumerable<PatientBookViewModel> models = doctors.Select(x => new PatientBookViewModel()
+            {
+                Id = x.Id,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                PhoneNumber = x.PhoneNumber,
+                specialization = x.specialization,
+                Image = x.Image,
+                Gendre = x.Gendre,
+                DateOfBirth = x.DateOfBirth,
+                PasswordHash = x.PasswordHash,
+                NormalizedEmail = x.Email,
+                
+
+            });
+            ViewBag.GetAll = "Doctors";
+            return View(doctors);
+            //return Ok(doctors.First());
+        }
+
+
+        [HttpGet]
+        public IActionResult DoctorSchedule()
+        {
+            //IEnumerable<Doctor> doctors = adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
+            //IEnumerable<PatientBookViewModel> models = doctors.Select(x => new PatientBookViewModel()
+            //{
+            //    Id = x.Id,
+            //    Email = x.Email,
+            //    FirstName = x.FirstName,
+            //    LastName = x.LastName,
+            //    PhoneNumber = x.PhoneNumber,
+            //    specialization = x.specialization,
+            //    Image = x.Image,
+            //    Gendre = x.Gendre,
+            //    DateOfBirth = x.DateOfBirth,
+            //    PasswordHash = x.PasswordHash,
+            //    NormalizedEmail = x.Email
+
+
+            //});
+            //ViewBag.GetAll = "Doctors";
+            //return Ok("hello");
+            return View();
+        }
+
+
     }
 }

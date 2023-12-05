@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data
@@ -13,9 +14,11 @@ namespace Data
         public int DoctorAppointmentId { get; set; }
         public Days WeekDay { get; set; }
 
+        [JsonIgnore]
+        public virtual DoctorAppointment DoctorAppointment { get; set; }
 
-        public DoctorAppointment DoctorAppointment { get; set; }
-        public List<Time> Times { get; set; }
+        [JsonIgnore]
+        public virtual List<Time> Times { get; set; }
 
     }
 }

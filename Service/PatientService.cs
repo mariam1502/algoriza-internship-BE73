@@ -12,6 +12,7 @@ namespace Service
     public class PatientService:IPatientService
     {
         private IRepository<Patient> patientRepo;
+        private IRepository<Doctor> doctorRepo;
         public PatientService(IRepository<Patient> patientRepo) { 
             this.patientRepo = patientRepo;
             
@@ -41,6 +42,15 @@ namespace Service
             return false;
 
         }
+
+
+        //public IEnumerable<Doctor> GetAllDoctors(int page = 1, int pageSize = 10)
+        //{
+        //    IEnumerable<Doctor> doctors = doctorRepo.GetAll();
+        //    doctors = doctors.Skip((page - 1) * pageSize).Take(pageSize);
+        //    return doctors;
+        //}
+
 
 
 

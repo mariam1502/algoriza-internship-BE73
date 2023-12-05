@@ -9,7 +9,7 @@ namespace Repo
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+       Task< IEnumerable<T>> GetAll();
         Task<bool> AddAsync(T user);
         Task<bool> DeleteAsync(T doctor);
         Task<bool> EditAsync(T user);

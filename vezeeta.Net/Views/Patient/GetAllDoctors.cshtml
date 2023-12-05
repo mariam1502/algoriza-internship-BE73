@@ -1,0 +1,92 @@
+﻿@using Data;
+@model IEnumerable<Doctor>;
+
+@{
+    Layout = "_Layout1";
+
+
+}
+
+
+<h1>Get All @ViewBag.GetAll Page</h1>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Specialization</th>
+            <th>Price</th>
+            <th>Age</th>
+            <th>Gendre</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eachModel in Model)
+        {
+
+
+            string fullName = eachModel.FirstName + " " + eachModel.LastName;
+            DateTime currentDate = DateTime.Now;
+            int age = currentDate.Year - eachModel.DateOfBirth.Year;
+            
+            <tr>
+                <td>@eachModel.Image</td>
+                <td>@fullName</td>
+                <td>@eachModel.Email</td>
+                <td>@eachModel.specialization</td>
+
+                <td>@(eachModel.DoctorAppointment.Price)</td>
+
+                <td>@age</td>
+                <td>@eachModel.Gendre</td>
+
+
+
+                <td>@eachModel.PhoneNumber</td>
+                <th>
+                    @{
+                        if (ViewBag.GetAll == "Doctors")
+                        {
+
+                            <br />
+
+
+                            <form asp-controller="Patient" asp-action="DoctorSchedule" method="post">
+                                <input type="hidden" name="DoctorId" value=@eachModel.Id />
+                                <button type="submit">View</button>
+
+                            </form>
+
+                           
+                            <br />
+                        }
+                    }
+
+                </th>
+
+
+
+
+
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+@{
+    @for (int x = 1; x <= 10; x++)
+    {
+        <form asp-controller="Patient" asp-action="GetAllDoctors" method="get" style="display: inline-block;margin-right: 5px;">
+            <input type="hidden" name="pageNumber" value="@x" />
+            <button type="submit">@x</button>
+        </form>
+    }
+}

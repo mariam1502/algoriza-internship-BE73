@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data
@@ -10,6 +11,7 @@ namespace Data
     {
         public string specialization {  get; set; }
         public string DoctorAppointmentId { get; set; }
-        public DoctorAppointment DoctorAppointment { get; set; }
+        [JsonIgnore]
+        public virtual DoctorAppointment DoctorAppointment { get; set; }
     }
 }

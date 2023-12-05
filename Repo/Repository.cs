@@ -21,9 +21,9 @@ namespace Repo
             this._context = context;
             _entity = context.Set<T>();
         }
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return _entity.AsEnumerable<T>();
+            return await _entity.ToListAsync();
         }
 
         public async Task<bool> AddAsync(T user)

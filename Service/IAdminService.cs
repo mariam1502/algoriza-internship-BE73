@@ -10,17 +10,17 @@ namespace Service
     public interface IAdminService
     {
 
-        int NumOfDoctors();
-        int NumOfPatients();
+        Task<int> NumOfDoctors();
+        Task<int> NumOfPatients();
 
         Task<bool> AddDoctor(Doctor doctor);
         Task<bool> EditDoctor(Doctor doctor);
         Task<bool> DeleteDoctorAsync(Doctor doctor);
-        IEnumerable<Doctor> GetAllDoctors(int page=1 , int pageSize=10);  //duplicated method
+        Task<IEnumerable<Doctor>>GetAllDoctors(int page=1 , int pageSize=10);  //duplicated method
         //Task<Doctor> GetDoctorById(string id);
 
 
-        IEnumerable<Patient> GetAllPatients();
+        Task<IEnumerable<Patient>> GetAllPatients();
         //Task<Patient> GetPatientById(string id);
 
 

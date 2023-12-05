@@ -21,16 +21,16 @@ namespace Service
             this.patientRepo = patientRepo;
             this.couponRepo = couponRepo;
         }
-        public int NumOfDoctors()
+        public async Task<int> NumOfDoctors()
         {
-            IEnumerable<Doctor> doctors =  doctorRepo.GetAll();
+            IEnumerable<Doctor> doctors = await doctorRepo.GetAll();
             int count = doctors.Count();
             return count;
         }
 
-        public int NumOfPatients()
+        public async Task<int> NumOfPatients()
         {
-            IEnumerable<Patient> patients =  patientRepo.GetAll();
+            IEnumerable<Patient> patients =  await patientRepo.GetAll();
             int count = patients.Count();
             return count;
         }
@@ -52,9 +52,9 @@ namespace Service
             return result;
         }
 
-        public IEnumerable<Doctor> GetAllDoctors(int page, int pageSize)
+        public async Task<IEnumerable<Doctor> >GetAllDoctors(int page, int pageSize)
         {
-            IEnumerable<Doctor> doctors =  doctorRepo.GetAll();          
+            IEnumerable<Doctor> doctors =await  doctorRepo.GetAll();          
             doctors = doctors.Skip((page - 1) * pageSize).Take(pageSize);
             return doctors;   
         }
@@ -64,9 +64,9 @@ namespace Service
         //    return await doctorRepo.GetByIdAsync(id);
         //}
 
-        public IEnumerable<Patient> GetAllPatients()
+        public async Task<IEnumerable<Patient>> GetAllPatients()
         {
-            return  patientRepo.GetAll();
+            return  await patientRepo.GetAll();
         }
 
         //public async Task<Patient> GetPatientById(string id)

@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "_Layout1";
+}
+<h1>Doctor Appointments</h1>
+
+
+<table>
+    <thead>
+        <tr>
+
+            <th>Day</th>
+            <th>From</th>
+            <th>To</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+       @*  @foreach (var eachModel in Model)
+        {
+            <tr>
+
+                <td>@eachModel.FirstName</td>
+                <td>@eachModel.LastName</td>
+                <td>@eachModel.Email</td>
+                <th>             
+                <form asp-controller="Patient" asp-action="Book" method="post">
+                    <input type="hidden" name="Id" value=@eachModel.Id />
+                    <button type="submit">Book</button>
+
+                </form>
+
+                </th>
+            </tr>
+
+        } *@
+    </tbody>
+</table>

@@ -4,32 +4,5 @@
 @model Microsoft.AspNetCore.Identity.IdentityUser
 
 <h1>Patient Home Page</h1>
-
-@{
-    if (Model != null)
-    {
-        <p> Hello , @Model.UserName </p>
-        <br />
-        <a asp-asp-controller="admin" asp-action="logout">Logout</a>
-        <br />
-        <p> Go to</p>
-
-
-        <a asp-controller="Admin" asp-action="GetAllDoctors">Get All Doctors</a>
-        <br />
-        <a asp-controller="Admin" asp-action="">Get a Doctor By Id</a>
-        <br />
-
-
-
-
-
-
-    }
-    else
-    {
-        <p>please login</p>
-        <a asp-asp-controller="admin" asp-action="login">Login</a>
-        <br />
-    }
-}
+<a asp-controller="Patient" asp-action="GetAllDoctors"> Search On Doctors</a><br />
+<a asp-controller="Patient" asp-action=""> Get All His/Her Bookings</a>
