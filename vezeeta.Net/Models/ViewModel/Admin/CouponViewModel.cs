@@ -7,6 +7,7 @@ namespace vezeeta.Net.Models.ViewModel.Admin
         public string Id { get; set; }
         public string CouponCode { get; set; }
         public int NumOfRequests { get; set; }
+        public int Number {  get; set; }    
         public DiscountType DiscountType { get; set; }
     }
 }

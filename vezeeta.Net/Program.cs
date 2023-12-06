@@ -37,6 +37,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthorizationBuilder();
 
 
+//builder.Services.AddAuthentication().AddFacebook(facebookoptions =>
+//{
+//    facebookoptions.AppId = builder.Configuration["authentication:facebook:382368500806561"];
+//    facebookoptions.AppSecret = builder.Configuration["authentication:facebook:29bd1b9d86bff65b14f5b1f40309ec0e"];
+//});
+
+
 
 
 

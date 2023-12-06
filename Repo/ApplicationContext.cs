@@ -22,7 +22,7 @@ namespace Repo
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Coupon> Coupons {  get; set; }
         public DbSet<DoctorAppointment> DoctorAppointments { get; set; }
-        public DbSet<Book> Books { get; set; }
+        //public DbSet<Book> Books { get; set; }
 
 
 
@@ -47,6 +47,8 @@ namespace Repo
             .HasOne(b => b.Doctor)
             .WithOne(a => a.DoctorAppointment)
             .HasForeignKey<DoctorAppointment>(b => b.DoctorId);
+
+            new BookMap(modelBuilder.Entity<Book>());
 
 
         }

@@ -13,10 +13,12 @@ namespace Service
     {
         private IRepository<Patient> patientRepo;
         private IRepository<Day> dayRepo;
+        private IRepository<Book> bookRepo;
 
-        public PatientService(IRepository<Patient> patientRepo, IRepository<Day> dayRepo) { 
+        public PatientService(IRepository<Patient> patientRepo, IRepository<Day> dayRepo, IRepository<Book> bookRepo) { 
             this.patientRepo = patientRepo;
             this.dayRepo = dayRepo;
+            this.bookRepo = bookRepo;
 
         }
 
@@ -45,6 +47,18 @@ namespace Service
             
         }
 
+        public async Task<bool> Book(Book bookData)
+        {
+            bool result=await bookRepo.AddAsync(bookData);
+            return result;
+        }
+
+        public async Task<IEnumerable<Book>> GetAllBooking()
+        {
+            IEnumerable<Book> books = await bookRepo.GetAll();
+            return books;
+
+        }
 
 
 

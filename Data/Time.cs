@@ -14,8 +14,10 @@ namespace Data
         public TimeOnly From { get; set; }
         public TimeOnly To { get; set; }
 
-        [JsonIgnore]
         public virtual Day Day { get; set; }
+        [JsonIgnore]
+
+        public virtual List<Book> Books { get; set; }
 
 
     }

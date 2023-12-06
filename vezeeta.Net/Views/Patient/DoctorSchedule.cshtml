@@ -23,15 +23,26 @@
 
                 <td>@eachModel.WeekDay</td>
 
-                @foreach(var time in eachModel.Times)
+                @foreach(Time time in eachModel.Times)
                 {
                     <td>@time.From</td>
                     <td>@time.To</td>
                 
               
                 <th>             
-                <form asp-controller="Patient" asp-action="Book" method="post">
-                    <input type="hidden" name="Id" value=@eachModel.Id />
+                        <form asp-controller="Patient" asp-action="Book" method="post">
+                    <input type="hidden" name="timeId" value=@time.Id />
+                    <input type="text"  />
+                            <label name="DiscountType"></label>
+                            <select name="DiscountType" asp-items="Html.GetEnumSelectList<DiscountType>()">
+                            </select>
+@*                     <input type="hidden" name="doctorAppointment" value=@eachModel.DoctorAppointment />
+                    <input type="hidden" name="Time" value=@time /> *@
+                    <input type="hidden" name="request" value=@Request.Pending />
+
+
+
+
                     <button type="submit">Book</button>
 
                 </form>

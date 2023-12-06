@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repo;
 
@@ -11,9 +12,11 @@ using Repo;
 namespace Repo.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20231206163958_add-BookTable")]
+    partial class addBookTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,8 @@ namespace Repo.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("TimeId");
+                    b.HasIndex("TimeId")
+                        .IsUnique();
 
                     b.ToTable("Book");
                 });
@@ -288,14 +292,14 @@ namespace Repo.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "19a3ef68-66b7-46c0-9e7b-73a6dcc2ad29",
+                            ConcurrencyStamp = "8cd3eb92-043f-41e1-b7ae-3c35ac30d08c",
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "Admin@gmail.com",
                             PasswordHash = "Admin@123",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d8640de6-1e6b-4304-8fe1-9ae2dc378f34",
+                            SecurityStamp = "dc7a74b0-07f3-4f84-9133-83f90c19ffe2",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -473,8 +477,8 @@ namespace Repo.Migrations
                         .IsRequired();
 
                     b.HasOne("Data.Time", "Time")
-                        .WithMany("Books")
-                        .HasForeignKey("TimeId")
+                        .WithOne()
+                        .HasForeignKey("Data.Book", "TimeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -582,11 +586,6 @@ namespace Repo.Migrations
             modelBuilder.Entity("Data.DoctorAppointment", b =>
                 {
                     b.Navigation("Days");
-                });
-
-            modelBuilder.Entity("Data.Time", b =>
-                {
-                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("Data.Doctor", b =>

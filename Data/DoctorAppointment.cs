@@ -15,7 +15,6 @@ namespace Data
 
         [JsonIgnore]
         public virtual List<Day> Days { get; set; }
-        [JsonIgnore]
         public virtual Doctor Doctor { get; set; }
 
     }

@@ -14,7 +14,6 @@ namespace Data
         public int DoctorAppointmentId { get; set; }
         public Days WeekDay { get; set; }
 
-        [JsonIgnore]
         public virtual DoctorAppointment DoctorAppointment { get; set; }
 
         [JsonIgnore]

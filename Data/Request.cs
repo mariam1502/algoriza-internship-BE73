@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Patient: BaseEntity
+    public enum Request
     {
-        [JsonIgnore]
-        public virtual List<Book> Books { get; set; }
-
+        Pending=0,
+        Completed=1,
+        Cancelled=2
     }
 }

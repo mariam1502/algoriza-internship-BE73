@@ -1,9 +1,11 @@
-﻿using Data;
+﻿using Azure.Core;
+using Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Data;
+using System.Security.Claims;
 using vezeeta.Net.Models.ViewModel.Admin;
 using vezeeta.Net.Models.ViewModel.Patient;
 
@@ -92,23 +94,6 @@ namespace vezeeta.Net.Controllers
         public  async Task<IActionResult> GetAllDoctors(int? pageNumber)
         {
             IEnumerable<Doctor> doctors =  await adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
-            //IEnumerable<PatientBookViewModel> models = doctors.Select(x => new PatientBookViewModel()
-            //{
-            //    Id = x.Id,
-            //    Email = x.Email,
-            //    FirstName = x.FirstName,
-            //    LastName = x.LastName,
-            //    PhoneNumber = x.PhoneNumber,
-            //    specialization = x.specialization,
-            //    Image = x.Image,
-            //    Gendre = x.Gendre,
-            //    DateOfBirth = x.DateOfBirth,
-            //    PasswordHash = x.PasswordHash,
-            //    NormalizedEmail = x.Email,
-
-                
-
-            //});
             ViewBag.GetAll = "Doctors";
             return View(doctors);
             //return Ok(doctors.First());
@@ -124,9 +109,41 @@ namespace vezeeta.Net.Controllers
         }
 
         [HttpPost]
-        public IActionResult Book()
+        public async Task<IActionResult> Book(BookViewModel model)
         {
-            return Ok();
+
+            var currentPatientEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            Patient currentPatient = (Patient)await userManager.FindByEmailAsync(currentPatientEmail);
+
+            string currentPatientId = currentPatient.Id;
+
+            Book bookData= new Book()
+            {
+                 PatientId=currentPatientId,
+                 Request=model.Request,
+                 TimeId=model.TimeId,
+                 
+
+                 
+            };
+            bool result=await patientService.Book(bookData);
+            return RedirectToAction("index", "patient");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllBooking()
+        {
+            IEnumerable<Book> books = await patientService.GetAllBooking();
+            return View(books);
+
+            //return Ok(books);
+        }
+
+        [HttpPost]
+        public IActionResult Cancel()
+        {
+            return Ok("canceled");
         }
 
 

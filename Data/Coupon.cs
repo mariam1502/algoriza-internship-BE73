@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data
@@ -14,6 +15,8 @@ namespace Data
         public int Number { get; set; }
 
         public DiscountType DisccountType { get; set; }
+        [JsonIgnore]
+        public virtual List<Book> Books { get; set; }   
 
 
     }

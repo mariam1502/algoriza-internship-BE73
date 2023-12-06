@@ -59,21 +59,13 @@ namespace Service
             return doctors;   
         }
       
-        //public async Task<Doctor> GetDoctorById(string id)
-        //{
-        //    return await doctorRepo.GetByIdAsync(id);
-        //}
-
+      
         public async Task<IEnumerable<Patient>> GetAllPatients()
         {
             return  await patientRepo.GetAll();
         }
 
-        //public async Task<Patient> GetPatientById(string id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+      
 
         public async Task<bool> AddCoupon(Coupon coupon)
         {

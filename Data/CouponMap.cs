@@ -11,7 +11,6 @@ namespace Data
     {
         public CouponMap(EntityTypeBuilder<Coupon> entityBuilder)
         {
-            entityBuilder.Property(c => c.Id).ValueGeneratedOnAdd();
 
         }
     }

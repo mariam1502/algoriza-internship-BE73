@@ -242,11 +242,12 @@ namespace vezeeta.Net.Controllersf
                 CouponCode = model.CouponCode,
                 DisccountType = model.DiscountType,
                 NumOfRequests = model.NumOfRequests,
+                Number=model.Number,
             };
             var result = await adminService.AddCoupon(coupon);
             if (result)
             {
-                return View();
+                return RedirectToAction("index", "Admin");
 
             }
             return NotFound();
