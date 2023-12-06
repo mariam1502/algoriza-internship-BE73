@@ -13,12 +13,14 @@ namespace Repo
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationContext _context;
+        private readonly IUnitOfWork unitOfWork;
         private DbSet<T> _entity;
 
-        public Repository(ApplicationContext context)
+        public Repository(ApplicationContext context, IUnitOfWork unitOfWork)
         {
 
             this._context = context;
+            this.unitOfWork = unitOfWork;
             _entity = context.Set<T>();
         }
         public async Task<IEnumerable<T>> GetAll()
@@ -29,22 +31,22 @@ namespace Repo
         public async Task<bool> AddAsync(T user)
         {
             _entity.Add(user);
-            var result = await _context.SaveChangesAsync();
-            return result>0;
+            var result =await unitOfWork.SaveChanges();
+            return result;
         }
 
         public async Task<bool> DeleteAsync(T doctor)
         {
              _entity.Remove(doctor);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            var result =await unitOfWork.SaveChanges();
+            return result;
         }
 
         public async Task<bool> EditAsync(T newuser)
         {
             _entity.Update(newuser);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            var result =await unitOfWork.SaveChanges();
+            return result;
         }
 
 
@@ -61,20 +63,6 @@ namespace Repo
 
            
             throw new Exception($"Entity with ID {id} not found.");
-
-        }
-
-
-
-        public async Task<T> GetByEmailAsync(string email)
-        {
-            //T itemToGet = await _entity.FirstOrDefaultAsync<T>(e => e.Email == email);
-
-            //if (itemToGet != null)
-            //{
-            //    return itemToGet;
-            //}
-            throw new Exception($"Entity with Email {email} not found.");
 
         }
 

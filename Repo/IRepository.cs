@@ -17,6 +17,5 @@ namespace Repo
 
 
         Task<T> GetById(int id);
-        Task<T> GetByEmailAsync(string email);
     }
 }
