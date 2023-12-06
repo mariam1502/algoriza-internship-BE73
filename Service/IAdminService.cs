@@ -20,7 +20,7 @@ namespace Service
         //Task<Doctor> GetDoctorById(string id);
 
 
-        Task<IEnumerable<Patient>> GetAllPatients();
+        Task<IEnumerable<Patient>> GetAllPatients(int page, int pageSize);
         //Task<Patient> GetPatientById(string id);
 
 

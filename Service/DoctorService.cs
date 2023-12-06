@@ -4,6 +4,7 @@ using Repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,15 +16,21 @@ namespace Service
         private IRepository<Time> timeRepo;
         private IRepository<Day> dayRepo;
         private IRepository<Doctor> doctorRepo;
+        private IRepository<Patient> patientRepo;
+        private IRepository<Book> bookRepo;
+
+
         private readonly UserManager<IdentityUser> userManager;
 
-        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo, IRepository<Doctor> doctorRepo, UserManager<IdentityUser> userManager) 
+        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo, IRepository<Doctor> doctorRepo, UserManager<IdentityUser> userManager, IRepository<Patient> patientRepo, IRepository<Book> bookRepo) 
         {
             this.appointmentRepo = appointmentRepo;
             this.timeRepo = timeRepo;
             this.dayRepo = dayRepo;
             this.doctorRepo = doctorRepo;
             this.userManager = userManager; 
+            this.patientRepo = patientRepo;
+            this.bookRepo = bookRepo;
         }  
         public async Task<bool> AddAppointment(DoctorAppointment appointment)
         {
@@ -66,5 +73,27 @@ namespace Service
             }
             return false;
         }
+
+        public async Task<IEnumerable<Patient>> GetAllPatientRequests(string doctorId)
+        {
+            IEnumerable<Book>books=await bookRepo.GetAll();
+            IEnumerable<Patient> patients = books.Where(x => x.Time.Day.DoctorAppointment.DoctorId == doctorId ).Select(x=>x.Patient);
+            return patients;
+        }
+
+        public async Task<bool> ConfirmRequest(int BookId)
+        {
+            //bookRepo.GetByIdAsync()
+            Book book =await bookRepo.GetById(BookId);
+            if (book!=null)
+            {
+                book.Request = Request.Completed;
+                bool result= await  bookRepo.EditAsync(book);
+                return result;
+               
+            }
+            return false;
+        }
+
     }
 }

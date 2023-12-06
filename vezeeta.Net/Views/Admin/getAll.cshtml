@@ -13,14 +13,24 @@
 <table>
     <thead>
         <tr>
-            <th>Id</th>
+            <th>Image</th>
 
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Full Name</th>
             <th>Email</th>
-            <th>Specialization</th>
-            <th>Phone Number</th>
-             @{if(ViewBag.isAdmin=="Doctors")
+            <th>Phone</th>
+            <th>Gendre</th>
+            @{
+                if (ViewBag.GetAll == "Doctors")
+                {
+                    <th>Specialization</th>
+                }
+                else
+                {
+                    <th>DateOfBirth</th>
+
+                }
+            }
+             @{if(ViewBag.GetAll=="Doctors")
                  {
                      <th>Action</th>
                  }
@@ -30,14 +40,27 @@
    <tbody>
         @foreach (var eachModel in Model)
         {
+            string fullName = @eachModel.FirstName + " " + @eachModel.LastName;
             <tr>
-                <td>@eachModel.Id</td>
+                <td>@eachModel.Image</td>
 
-                <td>@eachModel.FirstName</td>
-                <td>@eachModel.LastName</td>
+                <td>@fullName</td>
                 <td>@eachModel.Email</td>
-                <td>@eachModel.specialization</td>
                 <td>@eachModel.PhoneNumber</td>
+                <td>@eachModel.Gendre</td>
+                @{
+                    if (ViewBag.GetAll == "Doctors")
+                    {
+                        <td>@eachModel.specialization</td>
+                    }
+                    else
+                    {
+                        <td>@eachModel.DateOfBirth.ToString("yyyy-MM-dd")</td>
+
+                    }
+                }
+
+
                 <th>
                  @{if(ViewBag.GetAll=="Doctors")
                  {
@@ -75,9 +98,20 @@
 @{
     @for (int x = 1; x <= 10; x++)
     {
-        <form asp-controller="Admin" asp-action="GetAllDoctors" method="get" style="display: inline-block;margin-right: 5px;">
-            <input type="hidden" name="pageNumber" value="@x" />
-            <button type="submit">@x</button>
-        </form>
+        if(ViewBag.GetAll=="Doctors")
+        {
+            <form asp-controller="Admin" asp-action="GetAllDoctors" method="get" style="display: inline-block;margin-right: 5px;">
+                <input type="hidden" name="pageNumber" value="@x" />
+                <button type="submit">@x</button>
+            </form>
+        }
+        else
+        {
+            <form asp-controller="Admin" asp-action="GetAllPatients" method="get" style="display: inline-block;margin-right: 5px;">
+                <input type="hidden" name="pageNumber" value="@x" />
+                <button type="submit">@x</button>
+            </form>
+        }
+
     }
 }

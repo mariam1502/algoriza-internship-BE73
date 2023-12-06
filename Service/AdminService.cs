@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Repo;
 using System.Numerics;
+using Azure;
 
 namespace Service
 {
@@ -60,9 +61,12 @@ namespace Service
         }
       
       
-        public async Task<IEnumerable<Patient>> GetAllPatients()
+        public async Task<IEnumerable<Patient>> GetAllPatients(int page, int pageSize)
         {
-            return  await patientRepo.GetAll();
+
+            IEnumerable<Patient> patients = await patientRepo.GetAll();
+            patients = patients.Skip((page - 1) * pageSize).Take(pageSize);
+            return patients;
         }
 
       

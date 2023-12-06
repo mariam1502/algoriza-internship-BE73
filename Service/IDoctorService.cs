@@ -16,6 +16,8 @@ namespace Service
 
         Task<bool> AddAppointment(DoctorAppointment appointment);
         Task<bool> AddDayTime(Day day, Time time, string currentDrId ,Days wekkday);
+        Task<IEnumerable<Patient>> GetAllPatientRequests(string doctorId);
+        Task<bool> ConfirmRequest(int BookId);
 
         //Editappointment
         //Deleteappointment

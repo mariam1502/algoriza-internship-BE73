@@ -6,6 +6,7 @@ using Service;
 using System.Security.Claims;
 using vezeeta.Net.Models.ViewModel.Doctor;
 using Data;
+using System.Net;
 
 namespace vezeeta.Net.Controllers
 {
@@ -92,6 +93,22 @@ namespace vezeeta.Net.Controllers
             //return Ok((Days)model.WeekDay);
 
             return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var currentDoctorsEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            string currentDoctorId = (await userManager.FindByEmailAsync(currentDoctorsEmail)).Id;
+            IEnumerable<Patient>patients=await doctorService.GetAllPatientRequests(currentDoctorId);
+            return View(patients);
+            //return Ok(patients);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmCheckUp(int bookId)
+        {
+            bool result=await doctorService.ConfirmRequest(bookId);
+            return RedirectToAction("Index","Doctor");
         }
     }
 }

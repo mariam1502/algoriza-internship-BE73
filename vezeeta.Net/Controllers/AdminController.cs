@@ -158,9 +158,9 @@ namespace vezeeta.Net.Controllersf
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPatients()
+        public async Task<IActionResult> GetAllPatients(int? pageNumber)
         {
-            IEnumerable<Patient> patients = await adminService.GetAllPatients();
+            IEnumerable<Patient> patients = await adminService.GetAllPatients(page: pageNumber ?? 1, pageSize: 2);
             IEnumerable<AdminViewModel> models = patients.Select(x => new AdminViewModel()
             {
                 Id = x.Id,

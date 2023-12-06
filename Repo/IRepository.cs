@@ -16,7 +16,7 @@ namespace Repo
         Task<bool> EditAsync(T user);
 
 
-        Task<IdentityUser> GetByIdAsync(string id);
+        Task<T> GetById(int id);
         Task<T> GetByEmailAsync(string email);
     }
 }

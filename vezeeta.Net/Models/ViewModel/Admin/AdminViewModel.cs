@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace vezeeta.Net.Models.ViewModel.Admin
 {
@@ -14,7 +15,7 @@ namespace vezeeta.Net.Models.ViewModel.Admin
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string specialization { get; set; }
-        public string Gendre { get; set; }
+        public Gendre Gendre { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Image { get; set; }
         public string NormalizedEmail { get; set; }

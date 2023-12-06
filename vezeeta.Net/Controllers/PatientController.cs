@@ -51,6 +51,7 @@ namespace vezeeta.Net.Controllers
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(PatientViewModel model)
         {
             Patient patient = new Patient()

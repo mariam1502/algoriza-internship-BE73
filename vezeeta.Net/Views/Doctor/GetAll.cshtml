@@ -1,0 +1,88 @@
+﻿
+@{
+    Layout = "_Layout1";
+
+
+}
+@using Data;
+@model IEnumerable<Patient>
+<h1> All Doctor's Requests</h1>
+
+<table>
+    <thead>
+        <tr>
+
+            <th>Full Name</th>
+             <th>Image</th>
+            <th>Age</th>
+            <th>Gendre</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>From</th>
+            <th>To</th>
+
+             <th>Action</th>
+
+          
+        </tr>
+    </thead>
+   <tbody>
+        @foreach (var eachModel in Model)
+        {
+            @foreach (var eachModelBook in eachModel.Books)
+            {
+
+                DateTime currentDate = DateTime.Now;
+                int age = currentDate.Year - eachModel.DateOfBirth.Year;
+                string fullName = @eachModel.FirstName + " " + @eachModel.LastName;
+                <tr>
+                    <td>@fullName</td>
+                    <td>@eachModel.Image</td>
+                    <td>@age</td>
+                    <td>@eachModel.Gendre</td>
+                    <td>@eachModel.PhoneNumber</td>
+                    <td>@eachModel.Email</td>
+                    <td>@eachModelBook.Time.From</td>
+                    <td>@eachModelBook.Time.To</td>
+
+                    <td>
+                        <form asp-controller="Doctor" asp-action="ConfirmCheckUp" method="post">
+                            <input type="hidden" name="bookId" value="@eachModelBook.Id" />
+                          <button type="submit">Check</button>
+                        </form>
+                    </td>
+
+
+
+
+
+                </tr>
+
+            }
+
+       
+
+        }
+    </tbody>
+</table>
+
+@{
+    @for (int x = 1; x <= 10; x++)
+    {
+        if(ViewBag.GetAll=="Doctors")
+        {
+            <form asp-controller="Admin" asp-action="GetAllDoctors" method="get" style="display: inline-block;margin-right: 5px;">
+                <input type="hidden" name="pageNumber" value="@x" />
+                <button type="submit">@x</button>
+            </form>
+        }
+        else
+        {
+            <form asp-controller="Admin" asp-action="GetAllPatients" method="get" style="display: inline-block;margin-right: 5px;">
+                <input type="hidden" name="pageNumber" value="@x" />
+                <button type="submit">@x</button>
+            </form>
+        }
+
+    }
+}

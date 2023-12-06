@@ -49,17 +49,21 @@ namespace Repo
 
 
 
-        public async Task<IdentityUser> GetByIdAsync(string id)
+        public async Task<T> GetById(int id)
         {
-            //T user = await _context.Set<IdentityUser>().SingleOrDefaultAsync(u => u.Id == id);
-            //if (user != null)
-            //{
-            //    return user;
-            //}
+            string tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
+            string sql = $"SELECT * FROM {tableName} WHERE Id = '{id}'";
+            T item = await _entity.FromSqlRaw(sql).FirstOrDefaultAsync();
+            if (item != null)
+            {
+                return item;
+            }
 
+           
             throw new Exception($"Entity with ID {id} not found.");
 
         }
+
 
 
         public async Task<T> GetByEmailAsync(string email)
