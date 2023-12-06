@@ -77,7 +77,7 @@ namespace Service
         public async Task<IEnumerable<Patient>> GetAllPatientRequests(string doctorId)
         {
             IEnumerable<Book>books=await bookRepo.GetAll();
-            IEnumerable<Patient> patients = books.Where(x => x.Time.Day.DoctorAppointment.DoctorId == doctorId ).Select(x=>x.Patient);
+            IEnumerable<Patient> patients = books.Where(x => x.Time.Day.DoctorAppointment.DoctorId == doctorId && x.Request==Request.Pending ).Select(x=>x.Patient);
             return patients;
         }
 

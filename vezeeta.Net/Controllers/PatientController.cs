@@ -142,9 +142,14 @@ namespace vezeeta.Net.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cancel()
+        public async Task<IActionResult> Cancel(int bookId)
         {
-            return Ok("canceled");
+            bool result=await patientService.CancelBook(bookId);
+            if(result)
+            {
+               return RedirectToAction("index", "Patient");
+            }
+            return NotFound();
         }
 
 

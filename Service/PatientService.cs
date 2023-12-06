@@ -3,6 +3,7 @@ using Repo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,14 @@ namespace Service
             return books;
 
         }
+        public async Task<bool> CancelBook(int bookId)
+        {
+            Book book=await bookRepo.GetById(bookId);
+            book.Request = Request.Cancelled;
+            bool result= await bookRepo.EditAsync(book);
+            return result;
+        }
+
 
 
 
