@@ -37,7 +37,7 @@
                 string fullName = @eachModel.FirstName + " " + @eachModel.LastName;
                 <tr>
                     <td>@fullName</td>
-                    <td>@eachModel.Image</td>
+                    <td>  <img src="~/patientImages/@eachModel.Image" width="50" asp-append-version="true"> </img></td>
                     <td>@age</td>
                     <td>@eachModel.Gendre</td>
                     <td>@eachModel.PhoneNumber</td>
@@ -69,20 +69,11 @@
 @{
     @for (int x = 1; x <= 10; x++)
     {
-        if(ViewBag.GetAll=="Doctors")
-        {
-            <form asp-controller="Admin" asp-action="GetAllDoctors" method="get" style="display: inline-block;margin-right: 5px;">
+            <form asp-controller="Doctor" asp-action="GetAll" method="get" style="display: inline-block;margin-right: 5px;">
                 <input type="hidden" name="pageNumber" value="@x" />
                 <button type="submit">@x</button>
             </form>
-        }
-        else
-        {
-            <form asp-controller="Admin" asp-action="GetAllPatients" method="get" style="display: inline-block;margin-right: 5px;">
-                <input type="hidden" name="pageNumber" value="@x" />
-                <button type="submit">@x</button>
-            </form>
-        }
+       
 
     }
 }

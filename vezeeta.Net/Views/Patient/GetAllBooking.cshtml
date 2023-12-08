@@ -32,7 +32,9 @@
             string fullName = @eachModel.Time.Day.DoctorAppointment.Doctor.FirstName + " " + @eachModel.Time.Day.DoctorAppointment.Doctor.LastName;
 
             <tr>
-                <td>@eachModel.Time.Day.DoctorAppointment.Doctor.Image</td>
+                <td>  <img src="~/doctorImages/@eachModel.Time.Day.DoctorAppointment.Doctor.Image" width="50" asp-append-version="true"> </img></td>
+
+                <td></td>
                 <td>@fullName</td>
                 <td>@eachModel.Time.Day.DoctorAppointment.Doctor.specialization</td>
                 <td>@eachModel.Time.Day.WeekDay</td>

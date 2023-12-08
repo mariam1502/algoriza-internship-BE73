@@ -17,7 +17,10 @@ namespace vezeeta.Net.Models.ViewModel.Admin
         public string specialization { get; set; }
         public Gendre Gendre { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
+        public string ImageFileName { get; set; }
+
+
         public string NormalizedEmail { get; set; }
 
     }

@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service;
@@ -19,15 +20,17 @@ namespace vezeeta.Net.Controllers
 
     public class PatientController : Controller
     {
-
+        
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private IPatientService patientService;
         private readonly IAdminService adminService;
         private IRoleService patientRole;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public PatientController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IPatientService patientService, IRoleService patientRole, IAdminService adminService)
+
+        public PatientController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IPatientService patientService, IRoleService patientRole, IAdminService adminService, IWebHostEnvironment webHostEnvironment)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -35,7 +38,25 @@ namespace vezeeta.Net.Controllers
             this.patientService = patientService;
             this.patientRole = patientRole;
             this.adminService = adminService;
-            
+            this.webHostEnvironment = webHostEnvironment;
+
+
+
+        }
+        private string UploadFile(AdminViewModel model)
+        {
+            string fileName = null;
+            if (model.Image != null)
+            {
+                string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "patientImages");
+                fileName = Guid.NewGuid().ToString() + "-" + model.Image.FileName;
+                string filePath = Path.Combine(uploadDir, fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Image.CopyTo(fileStream);
+                }
+            }
+            return fileName;
 
         }
         [HttpGet]
@@ -50,23 +71,26 @@ namespace vezeeta.Net.Controllers
         {
             return View();
         }
-        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(PatientViewModel model)
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Register(AdminViewModel model)
         {
+            string FileName =  UploadFile(model);
             Patient patient = new Patient()
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
                 PasswordHash = model.PasswordHash,
-                Image = model.Image,
+                Image = FileName,
                 Gendre = model.Gendre,
                 Email = model.Email,
                 NormalizedEmail = model.Email,
                 UserName=model.FirstName+model.LastName,
 
             };
+
             var registerResult = await patientService.Register(patient);
             IdentityUser addedPatient = await userManager.FindByEmailAsync(patient.Email);
 
@@ -151,6 +175,8 @@ namespace vezeeta.Net.Controllers
             }
             return NotFound();
         }
+
+     
 
 
     }

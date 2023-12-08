@@ -10,6 +10,7 @@ using vezeeta.Net.Models.ViewModel.Admin;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 
 namespace vezeeta.Net.Controllersf
@@ -25,12 +26,14 @@ namespace vezeeta.Net.Controllersf
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private IAdminService adminService;
-        public AdminController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager ,IAdminService adminService, RoleManager<IdentityRole> roleManager)
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public AdminController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager ,IAdminService adminService, RoleManager<IdentityRole> roleManager ,IWebHostEnvironment webHostEnvironment)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.adminService = adminService;
             this.roleManager = roleManager;
+            this.webHostEnvironment = webHostEnvironment;
         }
         [HttpGet]
 
@@ -104,10 +107,28 @@ namespace vezeeta.Net.Controllersf
         {
             return View();
         }
+        private string UploadFile(AdminViewModel model)
+        {
+            string fileName = null;
+            if(model.Image!=null)
+            {
+                string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "doctorImages");
+                fileName = Guid.NewGuid().ToString() + "-" + model.Image.FileName;
+                string filePath = Path.Combine(uploadDir, fileName);
+                using (var fileStream = new FileStream(filePath,FileMode.Create))
+                {
+                    model.Image.CopyTo(fileStream); 
+                }
+            }
+            return fileName;
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddDoctor(AdminViewModel model)
         {
+            string FileName = UploadFile(model);
+
             Doctor doctor = new Doctor()
             {
                 FirstName = model.FirstName,
@@ -115,7 +136,7 @@ namespace vezeeta.Net.Controllersf
                 PhoneNumber = model.PhoneNumber,
                 PasswordHash = model.PasswordHash,
                 specialization = model.specialization,
-                Image = model.Image,
+                Image = FileName,
                 Gendre = model.Gendre,
                 Email = model.Email,
                 NormalizedEmail = model.Email,
@@ -134,9 +155,13 @@ namespace vezeeta.Net.Controllersf
             return RedirectToAction("Index", "Admin");
         }
 
+        
+
+
         [HttpGet]
         public async Task<IActionResult> GetAllDoctors(int? pageNumber)
         {
+
             IEnumerable<Doctor> doctors = await adminService.GetAllDoctors(page: pageNumber ?? 1, pageSize: 2);
             IEnumerable<AdminViewModel> models = doctors.Select(x => new AdminViewModel()
             {
@@ -146,7 +171,7 @@ namespace vezeeta.Net.Controllersf
                 LastName = x.LastName,
                 PhoneNumber = x.PhoneNumber,
                 specialization = x.specialization,
-                Image = x.Image,
+                ImageFileName = x.Image,
                 Gendre = x.Gendre,
                 DateOfBirth = x.DateOfBirth,
                 PasswordHash = x.PasswordHash,
@@ -154,6 +179,7 @@ namespace vezeeta.Net.Controllersf
             });
             ViewBag.GetAll = "Doctors";
             return View("getAll", models);
+            //return Ok(models);
         }
 
 
@@ -168,7 +194,7 @@ namespace vezeeta.Net.Controllersf
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 PhoneNumber = x.PhoneNumber,
-                Image = x.Image,
+                ImageFileName = x.Image,
                 Gendre = x.Gendre,
                 DateOfBirth = x.DateOfBirth,
                 PasswordHash = x.PasswordHash,

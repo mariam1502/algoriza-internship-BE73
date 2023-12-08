@@ -42,7 +42,19 @@
         {
             string fullName = @eachModel.FirstName + " " + @eachModel.LastName;
             <tr>
-                <td>@eachModel.Image</td>
+                
+                @if (ViewBag.GetAll == "Doctors")
+                {
+                    <td>  <img src="~/doctorImages/@eachModel.ImageFileName" width="50" asp-append-version="true"> </img></td>
+
+                }
+                else
+                {
+                    <td>  <img src="~/patientImages/@eachModel.ImageFileName" width="50" asp-append-version="true"> </img></td>
+
+                }
+
+
 
                 <td>@fullName</td>
                 <td>@eachModel.Email</td>
