@@ -16,6 +16,6 @@ namespace Repo
         Task<bool> EditAsync(T user);
 
 
-        Task<T> GetById(int id);
+        Task<T> GetById(int int_id=0,string string_id="");
     }
 }

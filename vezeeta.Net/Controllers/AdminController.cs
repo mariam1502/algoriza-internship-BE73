@@ -27,13 +27,16 @@ namespace vezeeta.Net.Controllersf
         private readonly RoleManager<IdentityRole> roleManager;
         private IAdminService adminService;
         private readonly IWebHostEnvironment webHostEnvironment;
-        public AdminController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager ,IAdminService adminService, RoleManager<IdentityRole> roleManager ,IWebHostEnvironment webHostEnvironment)
+        private IEmailSender emailSenderService;   
+        public AdminController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager ,IAdminService adminService, 
+            RoleManager<IdentityRole> roleManager ,IWebHostEnvironment webHostEnvironment, IEmailSender emailSenderService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.adminService = adminService;
             this.roleManager = roleManager;
             this.webHostEnvironment = webHostEnvironment;
+            this.emailSenderService = emailSenderService;
         }
         [HttpGet]
 
@@ -145,17 +148,31 @@ namespace vezeeta.Net.Controllersf
             };
 
 
-            await adminService.AddDoctor(doctor);
-            if (!await roleManager.RoleExistsAsync("Doctor"))
+            bool addDoctorResult = await adminService.AddDoctor(doctor);
+            if (addDoctorResult)
             {
-                var doctorRole = new IdentityRole("Doctor");
-                await roleManager.CreateAsync(doctorRole);
+                if (!await roleManager.RoleExistsAsync("Doctor"))
+                {
+                    var doctorRole = new IdentityRole("Doctor");
+                    await roleManager.CreateAsync(doctorRole);
+                }
+                await userManager.AddToRoleAsync(doctor, "Doctor");
+                string doctorId = (await userManager.FindByEmailAsync(model.Email)).Id;
+
+
+                if(doctorId!=null)
+                {
+                    await emailSenderService.SendEmailAsync(doctorId);
+                    return RedirectToAction("Index", "Admin");
+
+                }
+
+
             }
-            await userManager.AddToRoleAsync(doctor, "Doctor");
-            return RedirectToAction("Index", "Admin");
+            return BadRequest();
         }
 
-        
+
 
 
         [HttpGet]

@@ -25,6 +25,8 @@ builder.Services.AddTransient(typeof(IRepository<>),typeof(Repository<>));
 builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IDoctorService, DoctorService>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 
 //builder.Services.AddTransient<ICouponService, CouponService>();
 

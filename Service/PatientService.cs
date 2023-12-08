@@ -62,7 +62,7 @@ namespace Service
         }
         public async Task<bool> CancelBook(int bookId)
         {
-            Book book=await bookRepo.GetById(bookId);
+            Book book=await bookRepo.GetById(int_id: bookId);
             book.Request = Request.Cancelled;
             bool result= await bookRepo.EditAsync(book);
             return result;

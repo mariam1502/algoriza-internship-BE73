@@ -22,7 +22,8 @@ namespace Service
 
         private readonly UserManager<IdentityUser> userManager;
 
-        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo, IRepository<Doctor> doctorRepo, UserManager<IdentityUser> userManager, IRepository<Patient> patientRepo, IRepository<Book> bookRepo) 
+        public DoctorService(IRepository<DoctorAppointment> appointmentRepo, IRepository<Time> timeRepo, IRepository<Day> dayRepo, 
+            IRepository<Doctor> doctorRepo, UserManager<IdentityUser> userManager, IRepository<Patient> patientRepo, IRepository<Book> bookRepo) 
         {
             this.appointmentRepo = appointmentRepo;
             this.timeRepo = timeRepo;
@@ -84,7 +85,7 @@ namespace Service
         public async Task<bool> ConfirmRequest(int BookId)
         {
             //bookRepo.GetByIdAsync()
-            Book book =await bookRepo.GetById(BookId);
+            Book book =await bookRepo.GetById(int_id: BookId);
             if (book!=null)
             {
                 book.Request = Request.Completed;
