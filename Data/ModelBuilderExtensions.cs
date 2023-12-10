@@ -17,7 +17,7 @@ namespace Data
                 new IdentityUser
                 {
                     Id="1",
-                     Email="Admin@gmail.com",
+                     Email="mariamismail15022@gmail.com",
                      NormalizedEmail= "Admin@gmail.com",
                      UserName ="Admin",
                       PasswordHash="Admin@123"
